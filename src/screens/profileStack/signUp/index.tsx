@@ -7,8 +7,8 @@ import AuthInput from 'components/shared/AuthInput';
 import IranYekan from 'components/shared/IranYekan';
 import MainButton from 'components/shared/MainButton';
 import Header from 'components/shared/Header';
-import styles from './styles';
 import SmsModal from 'components/shared/SmsModal';
+import styles from './styles';
 
 interface Props {
   navigation: StackNavigationProp<any>;
@@ -37,11 +37,11 @@ const reducer = (state: State, {type, payload}: ActionType) => {
       };
     case 'submit':
       if (state.phoneNumber && state.firstName && state.lastName) {
-        return {
-          ...state,
-          isSmsModalVisible: true,
-        };
       }
+      return {
+        ...state,
+        isSmsModalVisible: true,
+      };
       return state;
     case 'close_sms_modal':
       return {

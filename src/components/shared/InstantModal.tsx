@@ -26,7 +26,12 @@ export default ({visible, children, onRequestClose}: Props) => (
     modalStyle={styles.modalStyle}
     onSwipeOut={onRequestClose}>
     <View style={styles.headerContainer}>
-      <EvilIcons name="close" size={37} color={colors.grey2} />
+      <EvilIcons
+        name="close"
+        size={37}
+        color={colors.grey2}
+        onPress={onRequestClose}
+      />
     </View>
     {children}
   </Modal>

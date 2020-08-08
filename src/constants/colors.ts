@@ -33,6 +33,7 @@ export default {
   purple2: '#bdb6d9',
   red1: '#d0021b',
   red2: '#a52a26',
+  red3: '#F53E14',
   yellow1: '#f5a623',
   white1: '#fff',
   white2: 'rgba(255, 255, 255, 0.75)',

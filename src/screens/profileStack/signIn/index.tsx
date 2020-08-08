@@ -7,17 +7,32 @@ import AuthInput from 'components/shared/AuthInput';
 import IranYekan from 'components/shared/IranYekan';
 import MainButton from 'components/shared/MainButton';
 import Header from 'components/shared/Header';
+import Alert from 'components/shared/Alert';
 import styles from './styles';
 
 interface Props {
   navigation: StackNavigationProp<any>;
+  route: {
+    params: {
+      passwordChanged: boolean;
+    };
+  };
 }
 
-export default ({navigation: {goBack, navigate}}: Props) => {
+export default ({navigation: {goBack, navigate}, route}: Props) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+  const [alert, setAlert] = useState({title: '', visible: false});
   useEffect(() => {
+    if (route.params && route.params.passwordChanged) {
+      setAlert({title: 'رمز عبور با موفقیت ثبت شد', visible: true});
+    }
+    setAlert({title: 'رمز عبور با موفقیت ثبت شد', visible: true});
+    setTimeout(
+      () => setAlert({title: 'رمز عبور با موفقیت ثبت شد', visible: false}),
+      1000,
+    );
     const showListener = Keyboard.addListener('keyboardDidShow', () =>
       setIsKeyboardVisible(true),
     );
@@ -29,6 +44,7 @@ export default ({navigation: {goBack, navigate}}: Props) => {
       hideListener.remove();
     };
   }, []);
+  console.log('alert', alert);
   return (
     <View style={styles.mainContainer}>
       <Header onBackPress={goBack} hideDate title="ورود" />
@@ -66,12 +82,15 @@ export default ({navigation: {goBack, navigate}}: Props) => {
               onPress={() => navigate('SignUp')}>
               ثبت نام
             </IranYekan>
-            <IranYekan onPress={() => {}} style={styles.yellowText}>
+            <IranYekan
+              onPress={() => navigate('ForgotPassword')}
+              style={styles.yellowText}>
               فراموشی رمز عبور
             </IranYekan>
           </>
         )}
       </View>
+      <Alert {...alert} />
     </View>
   );
 };

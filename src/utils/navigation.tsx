@@ -19,12 +19,15 @@ import UnregisteredProfile from 'screens/profileStack/unregisteredProfile';
 import SignUp from 'screens/profileStack/signUp';
 import SignUpSetPassword from 'screens/profileStack/signUpSetPassword';
 import SignIn from 'screens/profileStack/signIn';
+import ForgotPassword from 'screens/profileStack/forgotPassword';
+import ResetPassword from 'screens/profileStack/resetPassword';
 
 import HomeIcon from 'assets/home.svg';
 import SearchIcon from 'assets/search.svg';
 import StarsIcon from 'assets/stars.svg';
+import UserIcon from 'assets/user.svg';
 import colors from 'constants/colors';
-import {FAKE_IMAGE} from 'constants/fakes';
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -39,7 +42,7 @@ const MainTabs = () => (
     <Tab.Screen
       options={{
         tabBarLabel: 'ناحیه کاربری',
-        tabBarIcon: () => <Image source={{uri: FAKE_IMAGE}} style={avatar} />,
+        tabBarIcon: (d) => <UserIcon width={25} height={25} fill={d.color} />,
       }}
       name="Profile"
       component={ProfileStackNavigator}
@@ -86,10 +89,12 @@ const HomeStackNavigator = () => (
 export default () => (
   <NavigationContainer>
     <Stack.Navigator headerMode="none">
-      <Stack.Screen name="SignUpSetPassword" component={SignUpSetPassword} />
-      <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="SignIn" component={SignIn} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="MainTabs" component={MainTabs} />
+      <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name="SignUpSetPassword" component={SignUpSetPassword} />
+      <Stack.Screen name="ResetPassword" component={ResetPassword} />
     </Stack.Navigator>
   </NavigationContainer>
 );
