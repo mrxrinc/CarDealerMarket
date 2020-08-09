@@ -23,7 +23,7 @@ export default (props: Props) => {
       style={[
         {
           fontFamily: `iy${props.fontWeight ? props.fontWeight : 'Regular'}`,
-          fontSize: 18,
+          fontSize: 15,
         },
         customStyle,
       ]}>

@@ -2,6 +2,9 @@ import {StyleSheet} from 'react-native';
 import Colors from 'constants/colors';
 
 export default StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+  },
   centerContainer: {
     width: '90%',
     alignSelf: 'center',
@@ -21,9 +24,5 @@ export default StyleSheet.create({
   },
   dropdown: {
     height: 30,
-  },
-  requestServiceButton: {
-    backgroundColor: Colors.purple1,
-    marginVertical: 10,
   },
 });

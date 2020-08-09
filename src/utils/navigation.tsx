@@ -24,7 +24,7 @@ import ResetPassword from 'screens/profileStack/resetPassword';
 
 import HomeIcon from 'assets/home.svg';
 import SearchIcon from 'assets/search.svg';
-import StarsIcon from 'assets/stars.svg';
+import SpecialServicesIcon from 'assets/specialServices.svg';
 import UserIcon from 'assets/user.svg';
 import colors from 'constants/colors';
 
@@ -37,42 +37,6 @@ const ProfileStackNavigator = () => (
   </Stack.Navigator>
 );
 
-const MainTabs = () => (
-  <Tab.Navigator tabBarOptions={TAB_BAR_OPTIONS}>
-    <Tab.Screen
-      options={{
-        tabBarLabel: 'ناحیه کاربری',
-        tabBarIcon: (d) => <UserIcon width={25} height={25} fill={d.color} />,
-      }}
-      name="Profile"
-      component={ProfileStackNavigator}
-    />
-    <Tab.Screen
-      name="Home"
-      options={{
-        tabBarLabel: 'امروز در دورهاتو',
-        tabBarIcon: (d) => <HomeIcon width={25} height={25} fill={d.color} />,
-      }}
-      component={HomeStackNavigator}
-    />
-    <Tab.Screen
-      options={{
-        tabBarLabel: 'جستجو',
-        tabBarIcon: (d) => <SearchIcon width={22} height={22} fill={d.color} />,
-      }}
-      name="Search"
-      component={CommingSoon}
-    />
-    <Tab.Screen
-      options={{
-        tabBarLabel: 'خدمات ویژه',
-        tabBarIcon: (d) => <StarsIcon width={23} height={23} fill={d.color} />,
-      }}
-      name="SpecialServices"
-      component={CommingSoon}
-    />
-  </Tab.Navigator>
-);
 const HomeStackNavigator = () => (
   <Stack.Navigator headerMode="none">
     <Stack.Screen name="Marketplaces" component={Marketplaces} />
@@ -86,12 +50,51 @@ const HomeStackNavigator = () => (
   </Stack.Navigator>
 );
 
+const MainTabs = () => (
+  <Tab.Navigator tabBarOptions={TAB_BAR_OPTIONS}>
+    <Tab.Screen
+      options={{
+        tabBarLabel: 'خدمات ویژه',
+        tabBarIcon: (d) => (
+          <SpecialServicesIcon width={25} height={25} fill={d.color} />
+        ),
+      }}
+      name="SpecialServices"
+      component={HomeStackNavigator}
+    />
+    <Tab.Screen
+      name="Home"
+      options={{
+        tabBarLabel: 'امروز در دورهاتو',
+        tabBarIcon: (d) => <HomeIcon width={25} height={25} fill={d.color} />,
+      }}
+      component={CommingSoon}
+    />
+    <Tab.Screen
+      options={{
+        tabBarLabel: 'جستجو',
+        tabBarIcon: (d) => <SearchIcon width={22} height={22} fill={d.color} />,
+      }}
+      name="Search"
+      component={CommingSoon}
+    />
+    <Tab.Screen
+      options={{
+        tabBarLabel: 'ناحیه کاربری',
+        tabBarIcon: (d) => <UserIcon width={25} height={25} fill={d.color} />,
+      }}
+      name="Profile"
+      component={ProfileStackNavigator}
+    />
+  </Tab.Navigator>
+);
+
 export default () => (
   <NavigationContainer>
     <Stack.Navigator headerMode="none">
+      <Stack.Screen name="MainTabs" component={MainTabs} />
       <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-      <Stack.Screen name="MainTabs" component={MainTabs} />
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="SignUpSetPassword" component={SignUpSetPassword} />
       <Stack.Screen name="ResetPassword" component={ResetPassword} />

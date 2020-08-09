@@ -42,7 +42,8 @@ export default ({navigation}: Props) => {
     });
   };
   return (
-    <Header title="بازار خودرو">
+    <View style={styles.mainContainer}>
+      <Header title="بازار خودرو" onBackPress={() => {}} />
       <View style={styles.centerContainer}>
         <SlidingBanner
           events={state.randomEvents}
@@ -71,12 +72,7 @@ export default ({navigation}: Props) => {
             }
           />
         ))}
-        <MainButton
-          title="در خواست ارايه خدمت در بازار ها"
-          onPress={() => navigation.navigate('RegisterService')}
-          style={styles.requestServiceButton}
-        />
       </View>
-    </Header>
+    </View>
   );
 };

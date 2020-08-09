@@ -28,11 +28,6 @@ export default ({navigation: {goBack, navigate}, route}: Props) => {
     if (route.params && route.params.passwordChanged) {
       setAlert({title: 'رمز عبور با موفقیت ثبت شد', visible: true});
     }
-    setAlert({title: 'رمز عبور با موفقیت ثبت شد', visible: true});
-    setTimeout(
-      () => setAlert({title: 'رمز عبور با موفقیت ثبت شد', visible: false}),
-      1000,
-    );
     const showListener = Keyboard.addListener('keyboardDidShow', () =>
       setIsKeyboardVisible(true),
     );
@@ -44,7 +39,6 @@ export default ({navigation: {goBack, navigate}, route}: Props) => {
       hideListener.remove();
     };
   }, []);
-  console.log('alert', alert);
   return (
     <View style={styles.mainContainer}>
       <Header onBackPress={goBack} hideDate title="ورود" />
