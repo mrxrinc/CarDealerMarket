@@ -1,10 +1,10 @@
 import React from 'react';
 import {TouchableOpacity, Image, View} from 'react-native';
-import IranYekan from 'components/shared/IranYekan';
+import IranYekan from 'components/common/IranYekan';
 import SwipeableModal from 'components/swipeableModal';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Colors from 'constants/colors';
-import MainButton from 'components/shared/MainButton';
+import MainButton from 'components/common/MainButton';
 import {ScrollView} from 'react-native-gesture-handler';
 import {StationType} from 'constants/types';
 import styles from './styles';
@@ -72,7 +72,7 @@ export default ({
             پارکینگ شماره {name}
           </IranYekan>
           <IranYekan style={styles.stationDescription}>
-            {characteristics.map(c => c)}
+            {characteristics.map((c) => c)}
           </IranYekan>
           <IranYekan style={styles.stationDescription}>
             قیمت رزرو:‌ {price} تومان

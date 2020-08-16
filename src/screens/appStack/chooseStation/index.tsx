@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
-import IranYekan from 'components/shared/IranYekan';
-import Header from 'components/shared/Header';
+import IranYekan from 'components/common/IranYekan';
+import Header from 'components/common/Header';
 import Station from './components/station';
 import {RouteType, NavigationType, ServiceStationType} from 'constants/types';
 import styles from './styles';

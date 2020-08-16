@@ -1,14 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {View, Keyboard} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
 import DorhatoLogo from 'assets/dorhato.svg';
-import AuthInput from 'components/shared/AuthInput';
-import IranYekan from 'components/shared/IranYekan';
-import MainButton from 'components/shared/MainButton';
-import Header from 'components/shared/Header';
-import Alert from 'components/shared/Alert';
+import AuthInput from 'components/common/AuthInput';
+import IranYekan from 'components/common/IranYekan';
+import MainButton from 'components/common/MainButton';
+import Header from 'components/common/Header';
+import Alert from 'components/common/Alert';
 import styles from './styles';
+import apis from 'utils/apis';
+import AsyncStorage from '@react-native-community/async-storage';
 
 interface Props {
   navigation: StackNavigationProp<any>;
@@ -20,8 +22,8 @@ interface Props {
 }
 
 export default ({navigation: {goBack, navigate}, route}: Props) => {
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [password, setPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('09356193235');
+  const [password, setPassword] = useState('123456');
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [alert, setAlert] = useState({title: '', visible: false});
   useEffect(() => {
@@ -39,6 +41,20 @@ export default ({navigation: {goBack, navigate}, route}: Props) => {
       hideListener.remove();
     };
   }, []);
+
+  const submit = async () => {
+    try {
+      const {data} = await apis.login({phoneNumber, password});
+      await AsyncStorage.setItem('jwt', 'Bearer ' + data.data);
+      const jwt = await AsyncStorage.getItem('jwt');
+      navigate('MainTabs');
+    } catch (e) {
+      console.log('e: ', e);
+      Object.keys(e).forEach((key) => {
+        console.log(key, e[key]);
+      });
+    }
+  };
   return (
     <View style={styles.mainContainer}>
       <Header onBackPress={goBack} hideDate title="ورود" />
@@ -63,7 +79,7 @@ export default ({navigation: {goBack, navigate}, route}: Props) => {
         />
         <MainButton
           title="ورود"
-          onPress={() => {}}
+          onPress={submit}
           style={[
             styles.submit,
             (!phoneNumber || !password) && styles.submitDisabled,

@@ -2,8 +2,6 @@ import React from 'react';
 import Modal, {SlideAnimation} from 'react-native-modals';
 import {View} from 'react-native';
 import styles from './styles';
-import {DEVICE_HEIGHT} from 'constants/layout';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 interface Props {
   children: any;

@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import IranYekan from 'components/shared/IranYekan';
+import IranYekan from 'components/common/IranYekan';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Colors from 'constants/colors';
 import {TODAY} from 'constants/date';

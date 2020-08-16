@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
-import IranYekan from 'components/shared/IranYekan';
+import IranYekan from 'components/common/IranYekan';
 import styles from './styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Colors from 'constants/colors';

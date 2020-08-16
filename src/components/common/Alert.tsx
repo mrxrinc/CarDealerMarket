@@ -37,8 +37,10 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
+    opacity: 0,
   },
   visible: {
+    opacity: 1,
     top: 0,
   },
   success: {

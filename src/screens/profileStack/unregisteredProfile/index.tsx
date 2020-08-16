@@ -2,8 +2,8 @@ import React from 'react';
 import {View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import UserIcon from 'assets/user.svg';
-import IranYekan from 'components/shared/IranYekan';
-import MainButton from 'components/shared/MainButton';
+import IranYekan from 'components/common/IranYekan';
+import MainButton from 'components/common/MainButton';
 import colors from 'constants/colors';
 import styles from './styles';
 

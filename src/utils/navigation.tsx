@@ -1,10 +1,11 @@
 import * as React from 'react';
-import {Image} from 'react-native';
-import {NavigationContainer, StackActions} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
+import {BOTTOM_TAB_PADDING} from 'constants/layout';
 import CommingSoon from 'screens/appStack/commingSoon';
+import CalendarTest from '../screens/calendarTest';
 // Home stack screens
 import RegisterCar from 'screens/appStack/registerCar';
 import RegisterService from 'screens/appStack/registerService';
@@ -42,11 +43,9 @@ const HomeStackNavigator = () => (
     <Stack.Screen name="Marketplaces" component={Marketplaces} />
     <Stack.Screen name="MarketplaceCalendar" component={MarketplaceCalendar} />
     <Stack.Screen name="RegisterCar" component={RegisterCar} />
-    <Stack.Screen name="EventReserve" component={EventReserve} />
     <Stack.Screen name="RegisterService" component={RegisterService} />
     <Stack.Screen name="ChooseMarketplace" component={ChooseMarketplace} />
     <Stack.Screen name="ChooseStation" component={ChooseStation} />
-    <Stack.Screen name="BuyParkingTicket" component={BuyParkingTicket} />
   </Stack.Navigator>
 );
 
@@ -92,11 +91,14 @@ const MainTabs = () => (
 export default () => (
   <NavigationContainer>
     <Stack.Navigator headerMode="none">
+      <Stack.Screen name="CalendarTest" component={CalendarTest} />
       <Stack.Screen name="MainTabs" component={MainTabs} />
-      <Stack.Screen name="SignIn" component={SignIn} />
+      <Stack.Screen name="BuyParkingTicket" component={BuyParkingTicket} />
+      <Stack.Screen name="EventReserve" component={EventReserve} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="SignUpSetPassword" component={SignUpSetPassword} />
+      <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="ResetPassword" component={ResetPassword} />
     </Stack.Navigator>
   </NavigationContainer>
@@ -111,13 +113,7 @@ const TAB_BAR_OPTIONS = {
   style: {
     backgroundColor: colors.headerBackground,
     elevation: 0,
-    height: 55,
+    height: BOTTOM_TAB_PADDING - 5,
   },
   activeTintColor: colors.yellow1,
-};
-
-const avatar = {
-  width: 29,
-  height: 29,
-  borderRadius: 54,
 };

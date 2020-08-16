@@ -2,7 +2,7 @@ import React from 'react';
 import {TextInput, View} from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import {KeyboardType} from 'constants/types';
-import IranYekan from 'components/shared/IranYekan';
+import IranYekan from 'components/common/IranYekan';
 import styles from './styles';
 
 type Props = {

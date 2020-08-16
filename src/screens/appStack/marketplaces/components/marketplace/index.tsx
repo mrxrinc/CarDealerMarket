@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableOpacity, Image, View} from 'react-native';
-import IranYekan from 'components/shared/IranYekan';
+import IranYekan from 'components/common/IranYekan';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Colors from 'constants/colors';
 import {MarketplaceType} from 'constants/types';

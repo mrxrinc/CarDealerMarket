@@ -6,7 +6,7 @@ import {
   Platform,
   ToastAndroid,
 } from 'react-native';
-import IranYekan from 'components/shared/IranYekan';
+import IranYekan from 'components/common/IranYekan';
 import QRCode from 'react-native-qrcode-svg';
 import CameraRoll from '@react-native-community/cameraroll';
 import ViewShot from 'react-native-view-shot';

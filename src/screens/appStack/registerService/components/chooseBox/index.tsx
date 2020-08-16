@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableOpacity, Image, View} from 'react-native';
-import IranYekan from 'components/shared/IranYekan';
+import IranYekan from 'components/common/IranYekan';
 import styles from './styles';
 import {ServiceStationType} from 'constants/types';
 
@@ -28,7 +28,7 @@ export default ({
         <IranYekan>{name}</IranYekan>
         <IranYekan>قیمت: {price}</IranYekan>
         <IranYekan style={styles.parkingDescription}>
-          {characteristics.map(c => c)}
+          {characteristics.map((c) => c)}
         </IranYekan>
       </View>
       <Image style={styles.parkingImage} source={{uri: image}} />

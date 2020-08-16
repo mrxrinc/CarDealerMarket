@@ -1,4 +1,6 @@
 import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import {FAKE_IMAGE} from 'constants/fakes';
 import {
   EventType,
@@ -9,6 +11,8 @@ import {
   ServiceType,
   ServiceStationType,
 } from 'constants/types';
+
+const _getJWT = () => AsyncStorage.getItem('jwt');
 
 const instance = axios.create({
   baseURL: 'http://46.209.114.30:9091/api/v1/',
@@ -37,6 +41,11 @@ type DedicatedSellStationReserve = SellStationReserve & {
 
 type serviceProviderReserve = ReservationBaseInfo & {
   service_id: number;
+};
+
+type Login = {
+  phoneNumber: string;
+  password: string;
 };
 
 const payReservation = async (id: number): Promise<ReservationResponseType> => {
@@ -117,5 +126,20 @@ export default {
   },
   verifyVerificationCode: async (phoneNumber: string) => {
     return true;
+  },
+  login: (data: Login) =>
+    instance.post('auth/login', {
+      suptel: data.phoneNumber,
+      password: data.password,
+    }),
+  getCurrentUser: async () => {
+    const Authorization = await _getJWT();
+    return instance({
+      url: 'auth/me',
+      method: 'get',
+      headers: {
+        Authorization,
+      },
+    });
   },
 };

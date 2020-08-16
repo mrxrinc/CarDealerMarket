@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableOpacity, Image, View} from 'react-native';
-import IranYekan from 'components/shared/IranYekan';
+import IranYekan from 'components/common/IranYekan';
 import {StationType} from 'constants/types';
 import styles from './styles';
 

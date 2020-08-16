@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text} from 'react-native';
 import {SliderBox} from 'react-native-image-slider-box';
-import IranYekan from 'components/shared/IranYekan';
+import IranYekan from 'components/common/IranYekan';
 import styles from './styles';
 import {EventType} from 'constants/types';
 import {MONTHS} from 'constants/date';

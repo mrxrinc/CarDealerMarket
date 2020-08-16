@@ -1,7 +1,12 @@
 import {StyleSheet} from 'react-native';
 import Colors from 'constants/colors';
+import {BOTTOM_TAB_PADDING} from 'constants/layout';
 
 export default StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    paddingBottom: BOTTOM_TAB_PADDING,
+  },
   centerContainer: {
     width: '90%',
     alignSelf: 'center',

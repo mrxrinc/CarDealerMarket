@@ -1,14 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {View} from 'react-native';
-import IranYekan from 'components/shared/IranYekan';
-import Header from 'components/shared/Header';
-import MainButton from 'components/shared/MainButton';
+import IranYekan from 'components/common/IranYekan';
+import Header from 'components/common/Header';
 import Input from 'components/input';
 import Marketplace from './components/marketplace';
 import SlidingBanner from './components/slidingBanner';
 import {EventType, CityType, NavigationType} from 'constants/types';
 import apis from 'utils/apis';
+import {AppContext} from 'utils/context';
 import styles from './styles';
+import AsyncStorage from '@react-native-community/async-storage';
+import actionTypes from 'constants/actionTypes';
 
 interface State {
   randomEvents: Array<EventType>;
@@ -25,14 +27,46 @@ export default ({navigation}: Props) => {
     cities: [],
     selectedCity: undefined,
   });
+  const context = useContext(AppContext);
 
   useEffect(() => {
-    (async () => {
+    getCitiesAndEvents();
+    checkAuthorization();
+  }, []);
+
+  const getCitiesAndEvents = async () => {
+    try {
       const {cities, randomEvents} = await apis.getCitiesAndRandomEvents();
       setState({cities, randomEvents, selectedCity: cities[0]});
-    })();
-  }, []);
-  const _onSlidingEventPress = (i: number) => {
+    } catch (e) {
+      console.log('getting cities and event e: ', e);
+    }
+  };
+
+  const checkAuthorization = async () => {
+    // if user is not logged in
+    if (context.state.user.userId) return;
+    try {
+      const jwt = await AsyncStorage.getItem('jwt');
+      // if user is not logged in
+      if (!jwt) return;
+      const res = await apis.getCurrentUser();
+      const user = res.data.data;
+      context.dispatch({
+        type: actionTypes.SET_USER,
+        payload: {
+          userId: user.id,
+          username: user.supname,
+          userPhoneNumber: user.suptel,
+          userEmail: user.supemail,
+        },
+      });
+    } catch (e) {
+      console.log('logging in e: ', e);
+    }
+  };
+
+  const onSlidingEventPress = (i: number) => {
     navigation.navigate('EventReserve', {event: state.randomEvents[i]});
   };
   const onCityChange = (cityName: string) => {
@@ -43,11 +77,11 @@ export default ({navigation}: Props) => {
   };
   return (
     <View style={styles.mainContainer}>
-      <Header title="بازار خودرو" onBackPress={() => {}} />
+      <Header title="بازار خودرو" />
       <View style={styles.centerContainer}>
         <SlidingBanner
           events={state.randomEvents}
-          onPress={_onSlidingEventPress}
+          onPress={onSlidingEventPress}
         />
         <View style={styles.chooseMarketplaceHeader}>
           <Input

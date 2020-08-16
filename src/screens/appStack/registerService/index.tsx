@@ -1,10 +1,10 @@
 import React from 'react';
 import {View} from 'react-native';
-import IranYekan from 'components/shared/IranYekan';
-import Header from 'components/shared/Header';
+import IranYekan from 'components/common/IranYekan';
+import Header from 'components/common/Header';
 import Input from 'components/input';
-import MainButton from 'components/shared/MainButton';
-import SuccessModal from 'components/shared/SuccessModal';
+import MainButton from 'components/common/MainButton';
+import SuccessModal from 'components/common/SuccessModal';
 import ChooseBox from './components/chooseBox';
 import {
   NavigationType,

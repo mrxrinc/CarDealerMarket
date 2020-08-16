@@ -5,14 +5,24 @@ interface Props {
   children: ReactNode;
 }
 interface State {
-  userId: string | null;
+  user: {
+    userId: number | null;
+    username: string | null;
+    userPhoneNumber: string | null;
+    userEmail: string | null;
+  };
 }
 interface Action {
   type: string;
   payload: any;
 }
 const INITIAL_STATE = {
-  userId: null,
+  user: {
+    userId: null,
+    username: null,
+    userPhoneNumber: null,
+    userEmail: null,
+  },
 };
 
 const AppContext = createContext<{
@@ -25,8 +35,8 @@ const AppContext = createContext<{
 
 const reducer = (state: State, {type, payload}: Action) => {
   switch (type) {
-    case types.SET_USER_ID:
-      return {...state, userId: payload};
+    case types.SET_USER:
+      return {...state, user: payload};
     default:
       throw new Error();
   }

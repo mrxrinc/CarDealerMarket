@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, TouchableOpacity} from 'react-native';
-import IranYekan from 'components/shared/IranYekan';
-import Header from 'components/shared/Header';
+import {View, TouchableOpacity, ScrollView} from 'react-native';
+
+import IranYekan from 'components/common/IranYekan';
+import Header from 'components/common/Header';
 import apis from 'utils/apis';
 import {EventType, NavigationType, RouteType} from 'constants/types';
 import {formatEventDate} from 'utils/date';
+
 import styles from './styles';
 
 interface Props {
@@ -20,12 +22,19 @@ export default ({
 }: Props) => {
   const [events, setEvents] = useState<Array<EventType>>([]);
   useEffect(() => {
-    (async () => {
-      const events = await apis.getMarketplaceEvents(marketplace.id);
-      setEvents(events);
-    })();
+    getMakrketplaceEvents();
   }, []);
-  const _renderEvents = (event: EventType, i: number) => {
+
+  const getMakrketplaceEvents = async () => {
+    try {
+      const events = await apis.getMarketplaceEvents(marketplace.id);
+      console.log('events', events);
+      setEvents(events);
+    } catch (e) {
+      console.log('get marketplace events e: ', e);
+    }
+  };
+  const renderEvents = (event: EventType, i: number) => {
     const {name, description, start_date} = event;
     return (
       <View key={name}>
@@ -56,13 +65,16 @@ export default ({
     );
   };
   return (
-    <Header title="تقویم بازار" onBackPress={navigation.goBack}>
-      <View style={styles.centerContainer}>
-        <IranYekan style={styles.warningText}>
-          برنامه زمانی بازار مرکزی به این شرح است
-        </IranYekan>
-        {events.map(_renderEvents)}
-      </View>
-    </Header>
+    <View style={styles.mainContainer}>
+      <Header title="تقویم بازار" onBackPress={navigation.goBack} />
+      <ScrollView>
+        <View style={styles.centerContainer}>
+          <IranYekan style={styles.warningText}>
+            برنامه زمانی بازار مرکزی به این شرح است
+          </IranYekan>
+          {events.map(renderEvents)}
+        </View>
+      </ScrollView>
+    </View>
   );
 };

@@ -1,3 +1,4 @@
 export default {
-  SET_USER_ID: 'SET_USER_ID',
+  SET_USER: 'SET_USER',
+  SET_JWT: 'SET_JWT',
 };
