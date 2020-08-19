@@ -1,20 +1,16 @@
-import moment, {Moment} from 'jalali-moment';
+import moment, {Moment} from 'moment-jalaali';
 
 export const shamsiToMiladi = (date: string) => moment(date, 'jYYYY/jM/jD');
 
 export const formatEventDate = (date: string) =>
-  moment(shamsiToMiladi(date))
-    .locale('fa')
-    .format('ddd D MMMM YY');
+  moment(shamsiToMiladi(date)).locale('fa').format('ddd D MMMM YY');
 
 export const getEventDays = (
   start_date: string,
   end_date: string,
 ): Array<string> => {
   const _formatDay = (date: Moment) =>
-    moment(date)
-      .locale('fa')
-      .format('ddd D MMMM YY');
+    moment(date).locale('fa').format('ddd D MMMM YY');
 
   const days: Array<string> = [];
   const end = shamsiToMiladi(end_date);

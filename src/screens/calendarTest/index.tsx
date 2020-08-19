@@ -1,14 +1,62 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import {View, StyleSheet} from 'react-native';
 import IranYekan from 'components/common/IranYekan';
-// import styles from './styles';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Colors from 'constants/colors';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import colors from 'constants/colors';
-import {DEVICE_HEIGHT, DEVICE_WIDTH} from 'constants/layout';
+import {DEVICE_WIDTH} from 'constants/layout';
 import {MONTHS_PERSIAN} from 'constants/date';
-import styles from './styles';
+import moment from 'moment-jalaali';
+import {shamsiToMiladi} from 'utils/date';
+
+interface Month {
+  month: number;
+  days: number[];
+}
+interface GenerateCalendarData {
+  months: Array<Month>;
+  year: number;
+}
+const generateCalendarData = (
+  startTime: string,
+  endTime: string,
+): GenerateCalendarData => {
+  const months: Array<{month: number; days: number[]}> = [];
+  const startTimeSplited = startTime.split('-').map((item) => Number(item));
+  const endTimeSplited = endTime.split('-').map((item) => Number(item));
+  const numberOfMonthDays: {
+    [key: number]: number;
+  } = {};
+  const startMonth = startTimeSplited[1];
+  const startDay = startTimeSplited[2];
+  const endMonth = endTimeSplited[1];
+  const endDay = endTimeSplited[2];
+  const year = startTimeSplited[0];
+  // find the months
+  for (let i = startMonth; i <= endMonth; i++) {
+    const monthDate = shamsiToMiladi(`${year}-${i < 10 ? '0' + i : i}-01`);
+    const startWeekDay = moment(
+      i === startMonth ? startTime : monthDate,
+    ).weekday();
+    numberOfMonthDays[i] = moment(monthDate).daysInMonth();
+    let days: number[] = [];
+    if (startWeekDay !== 6) {
+      days = Array.from({length: startWeekDay + 1});
+    }
+    months.push({month: i, days});
+  }
+  let currentDay = startDay;
+  let currentMonth = startMonth;
+  while (currentDay !== endDay + 1 || currentMonth !== endMonth) {
+    months[currentMonth - startMonth].days.push(currentDay);
+    if (currentDay === numberOfMonthDays[currentMonth]) {
+      currentDay = 1;
+      currentMonth++;
+    } else {
+      currentDay++;
+    }
+  }
+  return {months, year};
+};
 
 type Props = {
   checked: boolean;
@@ -18,8 +66,8 @@ type Props = {
   onPress: () => void;
 };
 
-const start_date = '1399-06-14';
-const end_date = '1399-07-13';
+const start_date = '1399-06-20';
+const end_date = '1399-08-23';
 
 const mainStyle = StyleSheet.create({
   mainContainer: {
@@ -30,44 +78,41 @@ const mainStyle = StyleSheet.create({
   },
 });
 
-export default ({}: Props) => (
-  <View style={mainStyle.mainContainer}>
-    <Calendar
-      startTime={start_date}
-      endTime={end_date}
-      selectedDays={[]}
-      disabledDays={[]}
-    />
-  </View>
-);
+const disabledDays = ['7-5', '7-1'];
+const selectedDates: string[] = [];
+export default ({}: Props) => {
+  const [dates, setDates] = useState({start_date, end_date});
+  const [dateFormatted, setDateFormatted] = useState<GenerateCalendarData>({
+    months: [{month: 4, days: []}],
+    year: 0,
+  });
+  useEffect(() => {
+    setDateFormatted(generateCalendarData(dates.start_date, dates.end_date));
+  }, []);
 
-const generateCalendarData = (startTime: string, endTime: string) => {
-  const result = [];
-  const startTimeSplited = startTime.split('-').map((item) => parseInt(item));
-  const endTimeSplited = endTime.split('-').map((item) => parseInt(item));
-
-  const startMonth = startTimeSplited[1];
-  const startDay = startTimeSplited[2];
-  const endMonth = endTimeSplited[1];
-  const endDay = endTimeSplited[2];
-
-  // find the months
-  for (let i = startMonth; i <= endMonth; i++) {
-    result.push({month: i, days: []});
-  }
-
-  let currentDay = startDay;
-  let currentMonth = startMonth;
-  while (currentDay !== endDay + 1 || currentMonth !== endMonth) {
-    result[currentMonth - startMonth].days.push(currentDay);
-    if (currentDay === 31) {
-      currentDay = 1;
-      currentMonth++;
+  const onDayPress = (date: string, isSelected: boolean) => {
+    if (isSelected) {
+      selectedDates.push(date);
     } else {
-      currentDay++;
+      selectedDates.splice(selectedDates.indexOf(date), 1);
     }
-  }
-  return {months: result, year: startTimeSplited[0]};
+  };
+  const onSubmit = () => {
+    console.log('selectedDates', selectedDates);
+  };
+
+  return (
+    <View style={mainStyle.mainContainer}>
+      <Calendar
+        disabledDays={disabledDays}
+        onDayPress={onDayPress}
+        {...dateFormatted}
+      />
+      <TouchableOpacity onPress={onSubmit}>
+        <IranYekan>submit</IranYekan>
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 const calendarStyle = StyleSheet.create({
@@ -85,59 +130,102 @@ const calendarStyle = StyleSheet.create({
   },
 });
 
-const Calendar = ({startTime, endTime, selectedDays, disabledDays}) => {
-  const {months, year} = useMemo(
-    () => generateCalendarData(startTime, endTime),
-    [startTime, endTime],
-  );
-  console.log('months', months);
-  return (
-    <ScrollView style={calendarStyle.mainContainer}>
-      {months.map(({month, days}) => (
-        <View key={month} style={calendarStyle.monthContainer}>
-          <CalendarHeader month={month} year={year} />
-          <View style={calendarStyle.daysContainer}>
-            {days.map((day) => (
-              <Day key={day} day={day} />
-            ))}
-          </View>
+interface CalendarProps {
+  months: Array<Month>;
+  year: number;
+  disabledDays: string[];
+  onDayPress: (date: string, isSelected: boolean) => void;
+}
+const Calendar = ({months, year, disabledDays, onDayPress}: CalendarProps) => (
+  <ScrollView style={calendarStyle.mainContainer}>
+    {months.map(({month, days}) => (
+      <View key={month} style={calendarStyle.monthContainer}>
+        <CalendarHeader month={month} year={year} />
+        <View style={calendarStyle.daysContainer}>
+          {days.map((day, i) => (
+            <Day
+              key={i}
+              day={day}
+              month={month}
+              isDisabled={disabledDays.includes(`${month}-${day}`)}
+              onDayPress={onDayPress}
+            />
+          ))}
         </View>
-      ))}
-    </ScrollView>
-  );
-};
+      </View>
+    ))}
+  </ScrollView>
+);
 
 const dayStyle = StyleSheet.create({
   mainContainer: {
     height: (DEVICE_WIDTH * 0.9) / 7.04,
     width: (DEVICE_WIDTH * 0.9) / 7.04,
-    // backgroundColor: 'blue',
     justifyContent: 'center',
     alignItems: 'center',
   },
+  titleContainer: {
+    width: '75%',
+    height: '75%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  titleContainerSelected: {
+    borderRadius: 100,
+    backgroundColor: colors.yellow1,
+  },
+  titleContainerDisabled: {
+    borderRadius: 100,
+    backgroundColor: colors.grey1,
+  },
+  title: {
+    color: colors.purple1,
+  },
+  titleSelected: {
+    color: colors.white1,
+  },
+  titleDisabled: {
+    color: colors.grey10,
+  },
 });
 
-const Day = ({day, isDisabled, isSelected, onPress}) => {
+interface DayProps {
+  day?: number;
+  month: number;
+  isDisabled: boolean;
+  onDayPress: (date: string, isSelected: boolean) => void;
+}
+
+const Day = React.memo(({day, month, isDisabled, onDayPress}: DayProps) => {
+  const [isSelected, setIsSelected] = useState(false);
+  const handlePress = () => {
+    if (isDisabled || !day) return;
+    setIsSelected(!isSelected);
+    onDayPress(`${month}-${day}`, !isSelected);
+  };
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      onPress={onPress}
-      style={[
-        dayStyle.mainContainer,
-        isSelected && dayStyle.selected,
-        isDisabled && dayStyle.disabled,
-      ]}>
-      <IranYekan
+      onPress={handlePress}
+      style={dayStyle.mainContainer}>
+      <View
         style={[
-          dayStyle.title,
-          isDisabled && dayStyle.titleDisabled,
-          isSelected && dayStyle.titleSelected,
+          dayStyle.titleContainer,
+          isSelected && dayStyle.titleContainerSelected,
+          isDisabled && dayStyle.titleContainerDisabled,
         ]}>
-        {day}
-      </IranYekan>
+        <IranYekan
+          style={[
+            dayStyle.title,
+            isDisabled && dayStyle.titleDisabled,
+            isSelected && dayStyle.titleSelected,
+          ]}>
+          {day}
+        </IranYekan>
+      </View>
     </TouchableOpacity>
   );
-};
+});
 
 const calendarHeaderStyle = StyleSheet.create({
   mainContainer: {
@@ -160,13 +248,20 @@ const calendarHeaderStyle = StyleSheet.create({
     borderBottomColor: colors.grey1,
     borderBottomWidth: 1,
   },
+  headerTitle: {},
+  dayTitle: {},
 });
 
-const CalendarHeader = ({month, year}) => (
+interface CalendarHeaderProps {
+  month: number;
+  year: number;
+}
+
+const CalendarHeader = ({month, year}: CalendarHeaderProps) => (
   <View style={calendarHeaderStyle.mainContainer}>
     <View style={calendarHeaderStyle.headerContainer}>
       <IranYekan style={calendarHeaderStyle.headerTitle}>
-        {MONTHS_PERSIAN[month]} {year}
+        {MONTHS_PERSIAN[month - 1]} {year}
       </IranYekan>
     </View>
     <View style={calendarHeaderStyle.daysContainer}>

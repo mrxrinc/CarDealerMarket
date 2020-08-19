@@ -1,4 +1,4 @@
-import moment from 'jalali-moment';
+import moment from 'moment-jalaali';
 
 export const TODAY = moment(Date.now()).locale('fa').format('ddd D MMM YYYY');
 
