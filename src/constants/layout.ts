@@ -17,3 +17,5 @@ export const isIPhoneXrSize = () => DEVICE_HEIGHT == 896 || DEVICE_WIDTH == 896;
 export const GRID_WIDTH = DEVICE_WIDTH * 0.95;
 
 export const BOTTOM_TAB_PADDING = 60;
+
+export const CALENDAR_WIDTH = DEVICE_WIDTH * 0.9;

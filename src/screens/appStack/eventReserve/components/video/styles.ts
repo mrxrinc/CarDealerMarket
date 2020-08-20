@@ -19,6 +19,6 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    backgroundColor: colors.black5,
+    backgroundColor: colors.black3,
   },
 });

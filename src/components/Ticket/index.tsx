@@ -12,13 +12,25 @@ import CameraRoll from '@react-native-community/cameraroll';
 import ViewShot from 'react-native-view-shot';
 import {TicketDataType} from 'constants/types';
 import styles from './styles';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import {numberWithCommas} from 'utils/helpers';
+import moment from 'moment-jalaali';
+import MainButton from 'components/common/MainButton';
 
 interface Props {
   data: TicketDataType;
 }
 
 export default ({
-  data: {tracking_code, first_name, last_name, ticket_type, marketplace},
+  data: {
+    tracking_code = '653289472',
+    first_name = 'رضا',
+    last_name = 'شجاع',
+    ticket_type = 'dedicated_station',
+    marketplace = 'بازار مرکزی',
+    price = 20000,
+    date = Date.now(),
+  },
 }: Props) => {
   const onCapture = async (uri: string) => {
     if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
@@ -28,7 +40,7 @@ export default ({
       );
       return;
     }
-    const res = await CameraRoll.save(uri);
+    await CameraRoll.save(uri);
     ToastAndroid.show('بلیط در گالری ذخیره شد.', ToastAndroid.LONG);
   };
 
@@ -60,39 +72,55 @@ export default ({
       style={styles.mainContainer}
       onCapture={onCapture}
       captureMode="mount">
+      <EvilIcons name="close" style={styles.closeIcon} />
       <View style={styles.ticketContainer}>
-        <View style={styles.absoluteContainer}>
+        <View style={styles.top}>
+          <View style={styles.barcodeContainer}>
+            <QRCode value={tracking_code} size={280} />
+          </View>
+          <IranYekan style={[styles.title, styles.trackingCode]}>
+            {tracking_code}
+          </IranYekan>
+        </View>
+        <View style={styles.middleView}>
           <View style={styles.borderContainer}>
             <View style={[styles.borderCircle, styles.borderCircleLeft]} />
-            {Array.from({length: 25}).map((_, v) => (
-              <View key={v} style={styles.dash} />
-            ))}
+            <View style={styles.middleBorder} />
             <View style={[styles.borderCircle, styles.borderCircleRight]} />
           </View>
         </View>
-        <View style={styles.top}>
-          <IranYekan fontWeight="Bold" style={styles.title}>
+        <View style={styles.bottom}>
+          <IranYekan
+            style={[styles.title, styles.bottomTitle]}
+            fontWeight="Light">
             بلیط ورودی بازار خودرو
           </IranYekan>
-          <IranYekan style={styles.desc}>
+          <IranYekan fontWeight="Light" style={styles.desc}>
             {marketplace} - {renderTicketType(ticket_type)}
           </IranYekan>
-          <IranYekan style={styles.desc}>
-            {last_name + ' - ' + first_name + ' - ' + tracking_code}
+          <IranYekan style={styles.title} fontWeight="Bold">
+            {first_name} {last_name}
           </IranYekan>
-          <Text style={styles.desc}>WWW.DORHATO.COM</Text>
+          <IranYekan fontWeight="Bold" style={[styles.numbers, styles.price]}>
+            {numberWithCommas(price)}
+          </IranYekan>
+          <IranYekan style={styles.toman}>تومان</IranYekan>
         </View>
-        <View style={styles.bottom}>
-          <QRCode value={tracking_code} size={180} />
-          <View style={styles.barcodeDetails}>
-            <Text style={styles.barcodeNumTitle}>NUM :</Text>
-            <Text style={styles.barcodeNum}>178</Text>
-            <Text style={styles.barcodeDesc}>P12 - 17820</Text>
-            <Text style={styles.barcodeDesc}>BAZAR - D</Text>
-            <Text style={styles.barcodeDesc}>7755707</Text>
-          </View>
+        <View style={styles.dateContainer}>
+          <IranYekan fontWeight="Bold" style={styles.numbers}>
+            {moment(date).format('jYY/jM/jD')}
+          </IranYekan>
+          <IranYekan>تاریخ رویداد:</IranYekan>
         </View>
+        <Text style={styles.dorhatoUrl}>dorhato.com</Text>
       </View>
+      <MainButton
+        title="ذخیره"
+        onPress={() => {}}
+        style={styles.saveButton}
+        titleStyle={styles.saveButtonTitle}
+        fontWeight="Bold"
+      />
     </ViewShot>
   );
 };

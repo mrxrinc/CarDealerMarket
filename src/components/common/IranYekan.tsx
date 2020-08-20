@@ -1,33 +1,28 @@
 import React from 'react';
 import {Text} from 'react-native';
+import {FontWeight} from 'constants/types';
 
 interface Props {
   children: any;
-  fontWeight?: 'Bold' | 'Regular' | 'Light';
+  fontWeight?: FontWeight;
   style?: any;
   numberOfLines?: number;
   onPress?: () => void | Promise<void>;
 }
 
-export default (props: Props) => {
-  const customStyle = Array.isArray(props.style)
-    ? props.style.map((style) => {
-        if (style) {
-          return style;
-        }
-      })
-    : props.style;
+export default ({style, fontWeight, children, ...props}: Props) => {
+  const customStyle = Array.isArray(style) ? style : [style];
   return (
     <Text
       {...props}
       style={[
         {
-          fontFamily: `iy${props.fontWeight ? props.fontWeight : 'Regular'}`,
+          fontFamily: `iy${fontWeight ? fontWeight : 'Regular'}`,
           fontSize: 15,
         },
-        customStyle,
+        ...customStyle,
       ]}>
-      {props.children}
+      {children}
     </Text>
   );
 };

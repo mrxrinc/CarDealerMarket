@@ -20,7 +20,7 @@ export default StyleSheet.create({
   },
   title: {
     fontSize: 13,
-    color: Colors.black4,
+    color: Colors.black2,
   },
   price: {
     fontSize: 17,

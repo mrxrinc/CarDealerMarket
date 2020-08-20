@@ -9,7 +9,7 @@ export default StyleSheet.create({
     height: 50,
     width: '100%',
     borderRadius: 10,
-    backgroundColor: Colors.grey14,
+    backgroundColor: Colors.grey13,
     justifyContent: 'center',
     alignItems: 'center',
   },

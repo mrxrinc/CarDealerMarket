@@ -90,3 +90,15 @@ export type KeyboardType =
   | 'numeric'
   | 'email-address'
   | 'phone-pad';
+
+export type MonthInCalendar = {
+  month: number;
+  days: number[];
+};
+export type CalendarData = {
+  months: Array<MonthInCalendar>;
+  year: number;
+};
+export type OnDatePress = (date: string, isSelected: boolean) => void;
+export type CalendarDate = {start_date: string; end_date: string};
+export type FontWeight = 'Bold' | 'Regular' | 'Light';

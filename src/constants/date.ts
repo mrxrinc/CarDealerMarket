@@ -1,6 +1,8 @@
 import moment from 'moment-jalaali';
-
-export const TODAY = moment(Date.now()).locale('fa').format('ddd D MMM YYYY');
+import fa from 'moment/src/locale/fa';
+moment.locale('fa', fa);
+moment.loadPersian();
+export const TODAY = moment(Date.now()).format('ddd D MMM YYYY');
 
 export const MONTHS = [
   'FARVARDIN',

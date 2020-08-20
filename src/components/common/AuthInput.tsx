@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 12,
-    color: colors.grey14,
+    color: colors.grey13,
     marginBottom: 5,
     backgroundColor: colors.white1,
     position: 'absolute',

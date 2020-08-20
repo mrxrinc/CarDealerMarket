@@ -5,7 +5,6 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import {BOTTOM_TAB_PADDING} from 'constants/layout';
 import CommingSoon from 'screens/appStack/commingSoon';
-import CalendarTest from '../screens/calendarTest';
 // Home stack screens
 import RegisterCar from 'screens/appStack/registerCar';
 import RegisterService from 'screens/appStack/registerService';
@@ -91,9 +90,8 @@ const MainTabs = () => (
 export default () => (
   <NavigationContainer>
     <Stack.Navigator headerMode="none">
-      <Stack.Screen name="CalendarTest" component={CalendarTest} />
-      <Stack.Screen name="MainTabs" component={MainTabs} />
       <Stack.Screen name="BuyParkingTicket" component={BuyParkingTicket} />
+      <Stack.Screen name="MainTabs" component={MainTabs} />
       <Stack.Screen name="EventReserve" component={EventReserve} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="SignUp" component={SignUp} />
