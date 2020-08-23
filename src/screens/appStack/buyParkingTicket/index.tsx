@@ -17,6 +17,7 @@ import styles from './styles';
 import Calendar from 'components/calendar';
 import CalendarCalcualtion from 'components/calendarCalcualtion';
 import CoupledButtons from 'components/coupledButtons';
+import RegistrationModal from 'components/registrationModal';
 
 interface Props {
   navigation: NavigationType;
@@ -117,6 +118,7 @@ export default class BuyParkingTick extends React.Component<Props, State> {
           // }}
           onRequestClose={() => this.setState({isSuccessModalVisible: false})}
         />
+        <RegistrationModal visible={true} />
       </View>
     );
   }

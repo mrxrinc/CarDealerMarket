@@ -94,9 +94,9 @@ export default () => (
       <Stack.Screen name="MainTabs" component={MainTabs} />
       <Stack.Screen name="EventReserve" component={EventReserve} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+      <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="SignUpSetPassword" component={SignUpSetPassword} />
-      <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="ResetPassword" component={ResetPassword} />
     </Stack.Navigator>
   </NavigationContainer>

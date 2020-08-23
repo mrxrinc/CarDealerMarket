@@ -102,3 +102,7 @@ export type CalendarData = {
 export type OnDatePress = (date: string, isSelected: boolean) => void;
 export type CalendarDate = {start_date: string; end_date: string};
 export type FontWeight = 'Bold' | 'Regular' | 'Light';
+export type OnSignInFieldsSubmit = (values: {
+  phoneNumber: string;
+  password: string;
+}) => void;

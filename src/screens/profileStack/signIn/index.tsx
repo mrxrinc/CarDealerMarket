@@ -11,6 +11,8 @@ import Alert from 'components/common/Alert';
 import styles from './styles';
 import apis from 'utils/apis';
 import AsyncStorage from '@react-native-community/async-storage';
+import SignInFields from 'components/common/SignInFields';
+import {OnSignInFieldsChange} from 'constants/types';
 
 interface Props {
   navigation: StackNavigationProp<any>;
@@ -22,8 +24,6 @@ interface Props {
 }
 
 export default ({navigation: {goBack, navigate}, route}: Props) => {
-  const [phoneNumber, setPhoneNumber] = useState('09356193235');
-  const [password, setPassword] = useState('123456');
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [alert, setAlert] = useState({title: '', visible: false});
   useEffect(() => {
@@ -42,7 +42,7 @@ export default ({navigation: {goBack, navigate}, route}: Props) => {
     };
   }, []);
 
-  const submit = async () => {
+  const onSubmit = async () => {
     try {
       const {data} = await apis.login({phoneNumber, password});
       await AsyncStorage.setItem('jwt', 'Bearer ' + data.data);
@@ -55,6 +55,13 @@ export default ({navigation: {goBack, navigate}, route}: Props) => {
       });
     }
   };
+  const onInputChange: OnSignInFieldsChange = (key, value) => {
+    if (key === 'phoneNumber') {
+      setPhoneNumber(value);
+    } else {
+      setPassword(value);
+    }
+  };
   return (
     <View style={styles.mainContainer}>
       <Header onBackPress={goBack} hideDate title="ورود" />
@@ -64,26 +71,11 @@ export default ({navigation: {goBack, navigate}, route}: Props) => {
           isKeyboardVisible && styles.contentContainerShrink,
         ]}>
         {!isKeyboardVisible && <DorhatoLogo style={styles.logo} />}
-        <AuthInput
-          placeholder="091..."
-          title="شماره تماس"
-          value={phoneNumber}
-          onChange={setPhoneNumber}
-          keyboardType="phone-pad"
-        />
-        <AuthInput
-          title="رمز عبور"
-          secureTextEntry
-          value={password}
-          onChange={setPassword}
-        />
-        <MainButton
-          title="ورود"
-          onPress={submit}
-          style={[
-            styles.submit,
-            (!phoneNumber || !password) && styles.submitDisabled,
-          ]}
+        <SignInFields
+          phoneNumber={phoneNumber}
+          password={password}
+          onSubmit={onSubmit}
+          onChange={onInputChange}
         />
         {!isKeyboardVisible && (
           <>

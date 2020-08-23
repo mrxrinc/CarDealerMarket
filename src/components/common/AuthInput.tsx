@@ -5,7 +5,7 @@ import colors from 'constants/colors';
 import IranYekan from './IranYekan';
 
 type Props = {
-  title: string;
+  title: 'شماره تماس' | 'رمز عبور' | 'تکرار رمز عبور' | 'نام' | 'نام خانوادگی';
   value?: string;
   style?: object;
   error?: string;
@@ -13,6 +13,15 @@ type Props = {
   onChange: (value: string) => void;
   keyboardType?: KeyboardType;
   secureTextEntry?: boolean;
+};
+
+const validatePhoneNumber = (value: string): string | undefined => {
+  if (!value.match(/^09[0|1|2|3][0-9]{8}$/)) {
+    return 'شماره تماس معتبر نیست';
+  }
+};
+const validatePassword = (value: string): string | undefined => {
+  if (value.length < 6) return 'رمز عبور باید بیشتر از 6 کاراکتر باشد';
 };
 
 export default ({
@@ -24,26 +33,38 @@ export default ({
   onChange,
   keyboardType = 'default',
   secureTextEntry,
-}: Props) => (
-  <View style={[styles.mainContainer, style]}>
-    <IranYekan style={[styles.title, !!error && styles.titleError]}>
-      {title}
-    </IranYekan>
-    <TextInput
-      value={value}
-      onChangeText={onChange}
-      style={[styles.input, !!error && styles.inputError]}
-      placeholder={placeholder}
-      keyboardType={keyboardType}
-      secureTextEntry={secureTextEntry}
-    />
-    {error && (
-      <IranYekan fontWeight="Light" style={styles.error}>
-        {error}
+}: Props) => {
+  if (!error && value) {
+    switch (title) {
+      case 'شماره تماس':
+        error = validatePhoneNumber(value);
+        break;
+      case 'رمز عبور':
+      case 'تکرار رمز عبور':
+        error = validatePassword(value);
+    }
+  }
+  return (
+    <View style={[styles.mainContainer, style]}>
+      <IranYekan style={[styles.title, !!error && styles.titleError]}>
+        {title}
       </IranYekan>
-    )}
-  </View>
-);
+      <TextInput
+        value={value}
+        onChangeText={onChange}
+        style={[styles.input, !!error && styles.inputError]}
+        placeholder={placeholder}
+        keyboardType={keyboardType}
+        secureTextEntry={secureTextEntry}
+      />
+      {error && (
+        <IranYekan fontWeight="Light" style={styles.error}>
+          {error}
+        </IranYekan>
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   mainContainer: {
