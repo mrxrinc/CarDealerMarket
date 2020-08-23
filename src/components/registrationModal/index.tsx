@@ -1,45 +1,70 @@
-import React, {useState, useEffect} from 'react';
-import {View, TextInput} from 'react-native';
+import React, {useState} from 'react';
+import {View} from 'react-native';
 
-import IranYekan from 'components/common/IranYekan';
 import InstantModal from 'components/common/InstantModal';
-import MainButton from 'components/common/MainButton';
-import apis from 'utils/apis';
-import colors from 'constants/colors';
-import styles from './styles';
+import IranYekan from 'components/common/IranYekan';
 import SignInFields from 'components/common/SignInFields';
+import SignUpFields from 'components/common/SignUpFields';
+import SignUpSetPasswordFields from 'components/common/SignUpSetPasswordFields';
+import SmsFields from 'components/common/SmsFields';
+import styles from './styles';
 
 interface Props {
   onRequestClose: () => void;
   onSuccess: () => void;
-  phoneNumber: string;
   visible: boolean;
 }
 
-type Step = 'login' | 'signUp' | 'sms' | 'setPassword';
+type Step = 'signIn' | 'signUp' | 'smsVerify' | 'setPassword';
 
 export default ({onSuccess, visible, onRequestClose}: Props) => {
-  const [phoneNumber, setPhoneNumber] = useState(5);
-  const [password, setPassword] = useState('');
-  const [step, setStep] = useState<Step>('login');
+  const [step, setStep] = useState<Step>('setPassword');
 
-  const onSignUp = () => {};
+  const renderContent = () => {
+    const handleSignInSubmit = () => {};
+    const handleSignUpSubmit = () => {
+      setStep('smsVerify');
+    };
+    const onSmsVerySuccess = () => {
+      setStep('setPassword');
+    };
+
+    switch (step) {
+      case 'signIn':
+        return (
+          <>
+            <IranYekan style={styles.signInDescription}>
+              کاربر گرامی، جهت خرید بلیط، باید ابتدا ثبت نام کرده و حساب کاربری
+              داشته باشید!
+            </IranYekan>
+            <SignInFields onSubmit={handleSignInSubmit} />
+            <IranYekan
+              fontWeight="Bold"
+              onPress={() => setStep('signUp')}
+              style={styles.signUpButton}>
+              ثبت نام
+            </IranYekan>
+          </>
+        );
+      case 'signUp':
+        return <SignUpFields onSubmit={handleSignUpSubmit} />;
+
+      case 'smsVerify':
+        return (
+          <SmsFields phoneNumber="462352342" onSuccess={onSmsVerySuccess} />
+        );
+
+      case 'setPassword':
+        return <SignUpSetPasswordFields onSubmit={() => {}} />;
+    }
+  };
 
   return (
     <InstantModal
       visible={visible}
       onRequestClose={onRequestClose}
-      title="ورود یا ثبت نام">
-      <View style={styles.mainContainer}>
-        <IranYekan style={styles.description}>
-          کاربر گرامی، جهت خرید بلیط، باید ابتدا ثبت نام کرده و حساب کاربری
-          داشته باشید!
-        </IranYekan>
-        <SignInFields />
-        <IranYekan fontWeight="Bold" onPress={onSignUp} style={styles.signUp}>
-          ثبت نام
-        </IranYekan>
-      </View>
+      title={step === 'signIn' ? 'ورود یا ثبت نام' : 'ثبت نام'}>
+      <View style={styles.mainContainer}>{renderContent()}</View>
     </InstantModal>
   );
 };

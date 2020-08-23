@@ -8,7 +8,7 @@ export default StyleSheet.create({
     borderRadius: 5,
     overflow: 'hidden',
   },
-  video: {
+  image: {
     position: 'absolute',
     top: 0,
     bottom: 0,
@@ -20,5 +20,20 @@ export default StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     backgroundColor: colors.black3,
+  },
+  videoContainer: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    left: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'blue',
+    borderWidth: 10,
+  },
+  video: {
+    width: '100%',
+    height: 300,
   },
 });

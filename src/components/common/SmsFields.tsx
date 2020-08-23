@@ -3,20 +3,17 @@ import {View, StyleSheet, TextInput} from 'react-native';
 
 import SmsSvg from 'assets/sms.svg';
 import IranYekan from './IranYekan';
-import InstantModal from './InstantModal';
 import MainButton from './MainButton';
 import apis from 'utils/apis';
 import colors from 'constants/colors';
 
 interface Props {
-  onRequestClose: () => void;
-  onSuccess: () => void;
   phoneNumber: string;
-  visible: boolean;
+  onSuccess: () => void;
 }
 const NUMBERIC_REGEX = /^(\s*|\d+)$/;
 
-export default ({phoneNumber, onSuccess, visible, onRequestClose}: Props) => {
+export default ({phoneNumber, onSuccess}: Props) => {
   const [numbers, setNumbers] = useState('');
   const [countDown, setCountDown] = useState(5);
   useEffect(() => {
@@ -44,44 +41,42 @@ export default ({phoneNumber, onSuccess, visible, onRequestClose}: Props) => {
   };
   const onSubmit = () => {
     try {
-      const response = apis.verifyVerificationCode(phoneNumber, numbers);
+      const response = apis.verifyVerificationCode(phoneNumber);
       onSuccess();
     } catch (e) {
       console.log('e', e);
     }
   };
   return (
-    <InstantModal visible={visible} onRequestClose={onRequestClose}>
-      <View style={styles.mainContainer}>
-        <SmsSvg style={styles.smsSvg} />
-        <IranYekan style={styles.description}>
-          لطفا کد ارسالی را تایید کنید
-        </IranYekan>
-        <View style={styles.inputsContainer}>
-          <TextInput
-            keyboardType="numeric"
-            style={styles.input}
-            onChangeText={(v) =>
-              v.length <= 6 && NUMBERIC_REGEX.test(v) && setNumbers(v)
-            }
-            value={numbers}
-          />
-          <View pointerEvents="none" style={styles.inputBlocksContainer}>
-            {Array.from({length: 6}).map((_, i) => (
-              <View key={i} style={styles.inputBlock}>
-                <IranYekan style={styles.number}>{numbers[i]}</IranYekan>
-              </View>
-            ))}
-          </View>
+    <View style={styles.mainContainer}>
+      <SmsSvg style={styles.smsSvg} />
+      <IranYekan style={styles.description}>
+        لطفا کد ارسالی را تایید کنید
+      </IranYekan>
+      <View style={styles.inputsContainer}>
+        <TextInput
+          keyboardType="numeric"
+          style={styles.input}
+          onChangeText={(v) =>
+            v.length <= 6 && NUMBERIC_REGEX.test(v) && setNumbers(v)
+          }
+          value={numbers}
+        />
+        <View pointerEvents="none" style={styles.inputBlocksContainer}>
+          {Array.from({length: 6}).map((_, i) => (
+            <View key={i} style={styles.inputBlock}>
+              <IranYekan style={styles.number}>{numbers[i]}</IranYekan>
+            </View>
+          ))}
         </View>
-        <IranYekan
-          onPress={onResend}
-          style={[styles.resend, countDown === 0 && styles.resendActive]}>
-          ارسال دوباره کد {countDown > 0 && `(${countDown})`}
-        </IranYekan>
-        <MainButton onPress={onSubmit} style={styles.button} title="تایید کد" />
       </View>
-    </InstantModal>
+      <IranYekan
+        onPress={onResend}
+        style={[styles.resend, countDown === 0 && styles.resendActive]}>
+        ارسال دوباره کد {countDown > 0 && `(${countDown})`}
+      </IranYekan>
+      <MainButton onPress={onSubmit} style={styles.button} title="تایید کد" />
+    </View>
   );
 };
 

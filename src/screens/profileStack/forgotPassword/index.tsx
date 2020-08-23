@@ -6,7 +6,8 @@ import AuthInput from 'components/common/AuthInput';
 import IranYekan from 'components/common/IranYekan';
 import MainButton from 'components/common/MainButton';
 import Header from 'components/common/Header';
-import SmsModal from 'components/common/SmsModal';
+import SmsFields from 'components/common/SmsFields';
+import InstantModal from 'components/common/InstantModal';
 import styles from './styles';
 
 interface Props {
@@ -40,12 +41,9 @@ export default ({navigation: {goBack, navigate}}: Props) => {
           style={[styles.submit, !phoneNumber && styles.submitDisabled]}
         />
       </View>
-      <SmsModal
-        onSuccess={onSmsVerified}
-        visible={isSmsModalVisible}
-        onRequestClose={() => setIsSmsModalVisible(false)}
-        phoneNumber={phoneNumber}
-      />
+      <InstantModal visible={isSmsModalVisible} onRequestClose={onSmsVerified}>
+        <SmsFields onSuccess={onSmsVerified} phoneNumber={phoneNumber} />
+      </InstantModal>
     </View>
   );
 };

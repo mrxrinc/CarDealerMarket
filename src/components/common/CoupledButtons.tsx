@@ -1,7 +1,7 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View, StyleSheet} from 'react-native';
 import IranYekan from 'components/common/IranYekan';
-import styles from './styles';
+import colors from 'constants/colors';
 
 type Props = {
   buttons: Array<{title: string; onPress: () => void; style?: object}>;
@@ -27,3 +27,28 @@ export default ({buttons, additionalStyles}: Props) => (
     ))}
   </View>
 );
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: colors.purple3,
+    height: 53,
+    borderRadius: 14,
+  },
+  button: {
+    flex: 0.5,
+    height: '70%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  hasRightBorder: {
+    borderRightWidth: 1,
+    borderColor: colors.white1,
+  },
+  title: {
+    color: colors.white1,
+  },
+});

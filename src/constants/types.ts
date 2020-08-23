@@ -106,3 +106,12 @@ export type OnSignInFieldsSubmit = (values: {
   phoneNumber: string;
   password: string;
 }) => void;
+export type OnSignUpFieldsSubmit = (values: {
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+}) => void;
+export type OnSignUpSetPasswordFieldsSubmit = (values: {
+  password: string;
+  confirmPassword: string;
+}) => void;

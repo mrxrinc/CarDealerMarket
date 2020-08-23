@@ -7,8 +7,10 @@ import AuthInput from 'components/common/AuthInput';
 import IranYekan from 'components/common/IranYekan';
 import MainButton from 'components/common/MainButton';
 import Header from 'components/common/Header';
-import SmsModal from 'components/common/SmsModal';
+import SmsFields from 'components/common/SmsFields';
 import styles from './styles';
+import SignUpFields from 'components/common/SignUpFields';
+import InstantModal from 'components/common/InstantModal';
 
 interface Props {
   navigation: StackNavigationProp<any>;
@@ -70,39 +72,10 @@ export default ({navigation: {goBack, navigate}}: Props) => {
   return (
     <ScrollView style={styles.mainContainer}>
       <Header onBackPress={goBack} hideDate title="ثبت نام" />
-      <KeyboardAvoidingView style={styles.contentContainer}>
-        <IranYekan fontWeight="Light" style={styles.description}>
-          لطفا اطلاعات خود را بطور صحیح وارد کنید
-        </IranYekan>
-        <AuthInput
-          title="نام"
-          value={firstName}
-          onChange={(v) => setInput('firstName', v)}
-        />
-        <AuthInput
-          title="نام خانوادگی"
-          value={lastName}
-          onChange={(v) => setInput('lastName', v)}
-        />
-        <AuthInput
-          placeholder="091..."
-          title="شماره تماس"
-          value={phoneNumber}
-          onChange={(v) => setInput('phoneNumber', v)}
-          keyboardType="phone-pad"
-        />
-        <MainButton
-          title="مرحله بعد"
-          onPress={onSubmit}
-          style={styles.submit}
-        />
-      </KeyboardAvoidingView>
-      <SmsModal
-        onSuccess={onSmsVerified}
-        visible={isSmsModalVisible}
-        onRequestClose={closeSmsModal}
-        phoneNumber={phoneNumber}
-      />
+      <SignUpFields onSubmit={onSubmit} additionalStyles={styles.fields} />
+      <InstantModal visible={isSmsModalVisible} onRequestClose={closeSmsModal}>
+        <SmsFields onSuccess={onSmsVerified} phoneNumber={phoneNumber} />
+      </InstantModal>
     </ScrollView>
   );
 };

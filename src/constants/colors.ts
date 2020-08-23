@@ -19,6 +19,7 @@ export default {
   grey11: '#d0d6ea',
   grey12: '#d0d0d0',
   grey13: '#6f6f7f',
+  grey14: 'rgba(0, 0, 0, 0.5)',
   purple1: '#353b50',
   purple2: '#bdb6d9',
   purple3: '#353B50',

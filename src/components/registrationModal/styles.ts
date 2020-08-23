@@ -5,17 +5,18 @@ export default StyleSheet.create({
   mainContainer: {
     flex: 1,
     alignItems: 'center',
-    paddingHorizontal: 25,
     paddingTop: 20,
+    // backgroundColor: 'blue',
+    paddingHorizontal: 25,
   },
-  description: {
-    textAlign: 'center',
-    fontSize: 18,
+  signInDescription: {
     marginBottom: 40,
+    textAlign: 'center',
+    fontSize: 17,
   },
-  signUp: {
+  signUpButton: {
+    marginTop: 30,
+    fontSize: 17,
     color: colors.yellow1,
-    marginTop: 35,
-    fontSize: 18,
   },
 });

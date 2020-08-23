@@ -16,8 +16,9 @@ import {
 import styles from './styles';
 import Calendar from 'components/calendar';
 import CalendarCalcualtion from 'components/calendarCalcualtion';
-import CoupledButtons from 'components/coupledButtons';
 import RegistrationModal from 'components/registrationModal';
+import ForOthersModal from 'components/common/ForOthersModal';
+import ReserveCoupledButtons from 'components/common/ReserveCoupledButtons';
 
 interface Props {
   navigation: NavigationType;
@@ -26,24 +27,18 @@ interface Props {
 
 interface State {
   selectedDates: string[];
-  forOthers: boolean;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
+  isForOthersModalVisible: boolean;
   isSuccessModalVisible: boolean;
+  isRegistrationModalVisible: boolean;
   paymentData: object;
 }
 
 export default class BuyParkingTick extends React.Component<Props, State> {
   state = {
     selectedDates: [],
-    isBuyForOthersModalVisible: false,
-    otherPerson: {
-      firstName: '',
-      lastName: '',
-      phoneNumber: '',
-    },
+    isForOthersModalVisible: false,
     isSuccessModalVisible: false,
+    isRegistrationModalVisible: false,
     paymentData: {},
   };
 
@@ -55,11 +50,37 @@ export default class BuyParkingTick extends React.Component<Props, State> {
         : selectedDates.filter((d) => d !== date),
     });
   };
-  onSubmit = () => {};
+
+  onSubmit = async () => {
+    const {
+      route: {
+        params: {
+          event: {event_id},
+        },
+      },
+    } = this.props;
+    const {selectedDates} = this.state;
+    try {
+      const data = await apis.reserveVisitorParking({
+        event_id,
+        dates: selectedDates,
+        phone_number: 'sdf',
+        first_name: 'sd',
+        last_name: 'asdf',
+      });
+      this.setState({
+        paymentData: data,
+        isSuccessModalVisible: true,
+      });
+    } catch (e) {
+      console.log('e', e);
+    }
+  };
 
   render() {
     const [start_date, end_date] = ['1399-05-30', '1399-07-10'];
     const {navigation} = this.props;
+    const {isRegistrationModalVisible, isForOthersModalVisible} = this.state;
     // const {
     //   navigation,
     //   route: {
@@ -75,16 +96,6 @@ export default class BuyParkingTick extends React.Component<Props, State> {
       selectedDates,
     } = this.state;
 
-    const buttons = [
-      {
-        title: 'برای شخص دیگر',
-        onPress: () => this.setState({isBuyForOthersModalVisible: true}),
-      },
-      {
-        title: 'برای خودم',
-        onPress: this.onSubmit,
-      },
-    ];
     return (
       <View style={styles.mainContainer}>
         <Header title="خرید بلیط پارکینگ" onBackPress={navigation.goBack} />
@@ -103,49 +114,34 @@ export default class BuyParkingTick extends React.Component<Props, State> {
             price={3000}
           />
           <IranYekan style={styles.title}>پرداخت وجه و رزرو پارکینگ:</IranYekan>
-          <CoupledButtons buttons={buttons} />
+          <ReserveCoupledButtons
+            onSubmit={this.onSubmit}
+            onForOthersSubmit={() => {}}
+          />
         </ScrollView>
 
-        <SuccessModal
+        {/* <SuccessModal
           visible={isSuccessModalVisible}
-          data={{
-            tracking_code: 'wqer',
-          }}
           // data={{
           //   ...paymentData,
           //   firstName,
           //   lastName,
           // }}
           onRequestClose={() => this.setState({isSuccessModalVisible: false})}
+        /> */}
+        <RegistrationModal
+          onSuccess={() => {}}
+          onRequestClose={() =>
+            this.setState({isRegistrationModalVisible: false})
+          }
+          visible={isRegistrationModalVisible}
         />
-        <RegistrationModal visible={true} />
+        <ForOthersModal
+          onSubmit={() => {}}
+          onRequestClose={() => this.setState({isForOthersModalVisible: false})}
+          visible={isForOthersModalVisible}
+        />
       </View>
     );
   }
-
-  submitForm = async () => {
-    const {
-      route: {
-        params: {
-          event: {event_id},
-        },
-      },
-    } = this.props;
-    const {selectedDates, firstName, lastName, phoneNumber} = this.state;
-    try {
-      const data = await apis.reserveVisitorParking({
-        event_id,
-        dates: selectedDates,
-        firstName,
-        lastName,
-        phoneNumber,
-      });
-      this.setState({
-        paymentData: data,
-        isSuccessModalVisible: true,
-      });
-    } catch (e) {
-      console.log('e', e);
-    }
-  };
 }

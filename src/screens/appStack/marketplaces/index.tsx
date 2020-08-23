@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {View} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import IranYekan from 'components/common/IranYekan';
 import Header from 'components/common/Header';
 import Input from 'components/input';
@@ -78,7 +78,7 @@ export default ({navigation}: Props) => {
   return (
     <View style={styles.mainContainer}>
       <Header title="بازار خودرو" />
-      <View style={styles.centerContainer}>
+      <ScrollView style={styles.centerContainer}>
         <SlidingBanner
           events={state.randomEvents}
           onPress={onSlidingEventPress}
@@ -106,7 +106,7 @@ export default ({navigation}: Props) => {
             }
           />
         ))}
-      </View>
+      </ScrollView>
     </View>
   );
 };

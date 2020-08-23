@@ -6,12 +6,13 @@ import styles from './styles';
 
 interface Props {
   video: string;
+  onPress: () => void;
 }
 
-export default ({video}: Props) => (
+export default ({video, onPress}: Props) => (
   <TouchableOpacity
     activeOpacity={0.8}
-    onPress={() => {}}
+    onPress={onPress}
     style={styles.mainContainer}>
     <Image source={{uri: video}} style={styles.video} />
     <View style={styles.playContainer}>

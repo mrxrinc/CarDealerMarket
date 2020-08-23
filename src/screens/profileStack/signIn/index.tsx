@@ -3,16 +3,13 @@ import {View, Keyboard} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
 import DorhatoLogo from 'assets/dorhato.svg';
-import AuthInput from 'components/common/AuthInput';
 import IranYekan from 'components/common/IranYekan';
-import MainButton from 'components/common/MainButton';
 import Header from 'components/common/Header';
 import Alert from 'components/common/Alert';
-import styles from './styles';
-import apis from 'utils/apis';
 import AsyncStorage from '@react-native-community/async-storage';
 import SignInFields from 'components/common/SignInFields';
-import {OnSignInFieldsChange} from 'constants/types';
+import apis from 'utils/apis';
+import styles from './styles';
 
 interface Props {
   navigation: StackNavigationProp<any>;
@@ -44,7 +41,7 @@ export default ({navigation: {goBack, navigate}, route}: Props) => {
 
   const onSubmit = async () => {
     try {
-      const {data} = await apis.login({phoneNumber, password});
+      const {data} = await apis.login({});
       await AsyncStorage.setItem('jwt', 'Bearer ' + data.data);
       const jwt = await AsyncStorage.getItem('jwt');
       navigate('MainTabs');
@@ -53,13 +50,6 @@ export default ({navigation: {goBack, navigate}, route}: Props) => {
       Object.keys(e).forEach((key) => {
         console.log(key, e[key]);
       });
-    }
-  };
-  const onInputChange: OnSignInFieldsChange = (key, value) => {
-    if (key === 'phoneNumber') {
-      setPhoneNumber(value);
-    } else {
-      setPassword(value);
     }
   };
   return (
@@ -71,12 +61,7 @@ export default ({navigation: {goBack, navigate}, route}: Props) => {
           isKeyboardVisible && styles.contentContainerShrink,
         ]}>
         {!isKeyboardVisible && <DorhatoLogo style={styles.logo} />}
-        <SignInFields
-          phoneNumber={phoneNumber}
-          password={password}
-          onSubmit={onSubmit}
-          onChange={onInputChange}
-        />
+        <SignInFields onSubmit={onSubmit} />
         {!isKeyboardVisible && (
           <>
             <IranYekan
