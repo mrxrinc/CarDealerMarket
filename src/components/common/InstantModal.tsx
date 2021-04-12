@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import Modal, {SlideAnimation} from 'react-native-modals';
+import Modal from 'react-native-modal';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {DEVICE_HEIGHT, DEVICE_WIDTH} from 'constants/layout';
@@ -13,6 +13,7 @@ interface Props {
   visible: boolean;
   title?: string;
   onBackPress?: () => void;
+  height?: number;
 }
 
 export default ({
@@ -21,20 +22,16 @@ export default ({
   onRequestClose,
   onBackPress,
   title,
+  height,
 }: Props) => (
   <Modal
-    visible={visible}
-    onTouchOutside={onRequestClose}
-    swipeDirection="down"
-    modalAnimation={
-      new SlideAnimation({
-        slideFrom: 'bottom',
-      })
-    }
-    overlayOpacity={0.5}
-    rounded={false}
-    modalStyle={styles.modalStyle}
-    onSwipeOut={onRequestClose}>
+    isVisible={visible}
+    onBackdropPress={onRequestClose}
+    backdropOpacity={0.5}
+    style={[
+      styles.modalStyle,
+      height ? {height, marginTop: DEVICE_HEIGHT - height} : {},
+    ]}>
     <View style={styles.headerContainer}>
       <TouchableOpacity
         style={[styles.headerIconContainer, styles.closeIconContainer]}>

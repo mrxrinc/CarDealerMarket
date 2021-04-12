@@ -9,12 +9,25 @@ import {OnSignUpFieldsSubmit} from 'constants/types';
 interface Props {
   onSubmit: OnSignUpFieldsSubmit;
   additionalStyles?: object;
+  submitTitle?: string;
+  initialValues?: {
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+  };
 }
 
-export default ({onSubmit, additionalStyles}: Props) => {
-  const [firstName, setFirstName] = useState('123456');
-  const [lastName, setLastName] = useState('123456');
-  const [phoneNumber, setPhoneNumber] = useState('09356193235');
+export default ({
+  onSubmit,
+  submitTitle,
+  initialValues,
+  additionalStyles,
+}: Props) => {
+  const [firstName, setFirstName] = useState(initialValues?.firstName || '');
+  const [lastName, setLastName] = useState(initialValues?.lastName || '');
+  const [phoneNumber, setPhoneNumber] = useState(
+    initialValues?.phoneNumber || '',
+  );
 
   const handleSubmit = () => {
     onSubmit({phoneNumber, firstName, lastName});
@@ -34,7 +47,7 @@ export default ({onSubmit, additionalStyles}: Props) => {
         keyboardType="phone-pad"
       />
       <MainButton
-        title="مرحله بعد"
+        title={submitTitle || 'مرحله بعد'}
         onPress={handleSubmit}
         style={styles.submit}
       />

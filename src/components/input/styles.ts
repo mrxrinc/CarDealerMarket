@@ -37,7 +37,7 @@ export default StyleSheet.create({
     fontFamily: 'iyRegular',
   },
   title: {
-    color: Colors.grey3,
+    color: Colors.grey1,
     fontSize: 11.5,
   },
   dropdownContainer: {

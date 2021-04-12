@@ -1,13 +1,14 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {View, Keyboard} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-
 import DorhatoLogo from 'assets/dorhato.svg';
+import {AppContext} from 'utils/context';
 import IranYekan from 'components/common/IranYekan';
 import Header from 'components/common/Header';
 import Alert from 'components/common/Alert';
 import AsyncStorage from '@react-native-community/async-storage';
 import SignInFields from 'components/common/SignInFields';
+import {OnSignInFieldsSubmit} from 'constants/types';
 import apis from 'utils/apis';
 import styles from './styles';
 
@@ -38,12 +39,14 @@ export default ({navigation: {goBack, navigate}, route}: Props) => {
       hideListener.remove();
     };
   }, []);
+  const context = useContext(AppContext);
 
-  const onSubmit = async () => {
+  const onSubmit: OnSignInFieldsSubmit = async (form) => {
     try {
-      const {data} = await apis.login({});
+      const {data} = await apis.login(form);
+      console.log('data.data', data.data);
       await AsyncStorage.setItem('jwt', 'Bearer ' + data.data);
-      const jwt = await AsyncStorage.getItem('jwt');
+      apis.getCurrentUser(context.dispatch);
       navigate('MainTabs');
     } catch (e) {
       console.log('e: ', e);
@@ -52,6 +55,7 @@ export default ({navigation: {goBack, navigate}, route}: Props) => {
       });
     }
   };
+
   return (
     <View style={styles.mainContainer}>
       <Header onBackPress={goBack} hideDate title="ورود" />

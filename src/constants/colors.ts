@@ -24,6 +24,7 @@ export default {
   purple2: '#bdb6d9',
   purple3: '#353B50',
   red1: '#d0021b',
+  red2: '#F54A23',
   red3: '#F53E14',
   yellow1: '#f5a623',
   white1: '#fff',

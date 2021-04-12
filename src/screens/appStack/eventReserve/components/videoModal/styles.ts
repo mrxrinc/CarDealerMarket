@@ -17,8 +17,11 @@ export default StyleSheet.create({
     height: 250,
     width: '100%',
     backgroundColor: 'green',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   video: {
+    position: 'absolute',
     width: '100%',
     height: '100%',
     backgroundColor: 'yellow',

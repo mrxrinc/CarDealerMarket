@@ -191,3 +191,11 @@ export const PAYMENT_DATA = {
   ticket_type: '',
   marketplace: '',
 };
+
+export const EMPTY_STATION = {
+  id: 0,
+  name: '',
+  price: 0,
+  characteristics: [''],
+  image: '',
+};

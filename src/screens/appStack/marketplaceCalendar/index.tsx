@@ -8,6 +8,7 @@ import {EventType, NavigationType, RouteType} from 'constants/types';
 import {formatEventDate} from 'utils/date';
 
 import styles from './styles';
+import {FlatList} from 'react-native-gesture-handler';
 
 interface Props {
   navigation: NavigationType;
@@ -34,11 +35,11 @@ export default ({
       console.log('get marketplace events e: ', e);
     }
   };
-  const renderEvents = (event: EventType, i: number) => {
-    const {name, description, start_date} = event;
+  const renderEvent = ({item, index}: {item: EventType; index: number}) => {
+    const {name, description, start_date} = item;
     return (
       <View key={name}>
-        {i !== 0 && (
+        {index !== 0 && (
           <View style={styles.dashedBorderContainer}>
             <View style={styles.dashedBorder} />
             <View style={styles.dashedBorder} />
@@ -47,7 +48,7 @@ export default ({
         )}
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => navigation.navigate('EventReserve', {event})}
+          onPress={() => navigation.navigate('EventReserve', {event: item})}
           style={styles.event}>
           <View style={styles.eventDetails}>
             <IranYekan style={styles.eventTitle}>{name}</IranYekan>
@@ -67,14 +68,17 @@ export default ({
   return (
     <View style={styles.mainContainer}>
       <Header title="تقویم بازار" onBackPress={navigation.goBack} />
-      <ScrollView>
-        <View style={styles.centerContainer}>
+      <FlatList
+        data={events}
+        renderItem={renderEvent}
+        keyExtractor={(item) => item.name}
+        ListHeaderComponent={
           <IranYekan style={styles.warningText}>
             برنامه زمانی بازار مرکزی به این شرح است
           </IranYekan>
-          {events.map(renderEvents)}
-        </View>
-      </ScrollView>
+        }
+        style={styles.contentContainer}
+      />
     </View>
   );
 };

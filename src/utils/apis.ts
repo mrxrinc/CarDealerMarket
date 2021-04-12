@@ -1,7 +1,8 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
-
 import {FAKE_IMAGE} from 'constants/fakes';
+import {AppContext} from './context';
+import actionTypes from 'constants/actionTypes';
 import {
   EventType,
   CityType,
@@ -10,7 +11,9 @@ import {
   CarType,
   ServiceType,
   ServiceStationType,
+  ActionType,
 } from 'constants/types';
+import {Dispatch} from 'react';
 
 const _getJWT = () => AsyncStorage.getItem('jwt');
 
@@ -132,14 +135,27 @@ export default {
       suptel: data.phoneNumber,
       password: data.password,
     }),
-  getCurrentUser: async () => {
+  getCurrentUser: async (dispatch: Dispatch<ActionType>) => {
     const Authorization = await _getJWT();
-    return instance({
+    const res = await instance({
       url: 'auth/me',
       method: 'get',
       headers: {
         Authorization,
       },
     });
+    const user = res.data.data;
+    console.log('user', user);
+    dispatch({
+      type: actionTypes.SET_USER,
+      payload: {
+        id: user.id,
+        firstName: user.supname,
+        lastName: user.supfamily,
+        phoneNumber: user.suptel,
+        email: user.supemail,
+      },
+    });
+    return user;
   },
 };

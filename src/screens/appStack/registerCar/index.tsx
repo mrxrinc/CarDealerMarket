@@ -1,227 +1,179 @@
 import React from 'react';
-import {View, BackHandler} from 'react-native';
+import {View, ScrollView} from 'react-native';
+
 import IranYekan from 'components/common/IranYekan';
 import Header from 'components/common/Header';
 import Input from 'components/input';
-import MainButton from 'components/common/MainButton';
 import SuccessModal from 'components/common/SuccessModal';
+import Calendar from 'components/calendar';
+import CalendarCalcualtion from 'components/calendarCalcualtion';
+import RegistrationModal from 'components/registrationModal';
+import ForOthersModal from 'components/common/ForOthersModal';
+import ReserveCoupledButtons from 'components/common/ReserveCoupledButtons';
 import ChooseSpecialStation from './components/chooseSpecialStation';
-import StationsModal from './components/stationsModal';
-import {
-  StationType,
-  NavigationType,
-  CarType,
-  ReservationResponseType,
-} from 'constants/types';
+import DedicatedStationsModal from './components/dedicatedStationsModal';
 import apis from 'utils/apis';
-import {PAYMENT_DATA} from 'constants/fakes';
+import {
+  NavigationType,
+  RouteType,
+  OnDatePress,
+  CarType,
+  StationType,
+} from 'constants/types';
+import {EMPTY_STATION} from 'constants/fakes';
 import styles from './styles';
 
+const NORMAL_STATION = 'عادی';
 interface Props {
   navigation: NavigationType;
-  route: {
-    params: {
-      event_id: number;
-      price: number;
-      dates: Array<string>;
-    };
-  };
+  route: RouteType;
 }
-
 interface State {
   cars: Array<CarType>;
-  form: {
-    first_name: string;
-    last_name: string;
-    phone_number: string;
-    carModel: string;
-    manufacturing_year: string;
-    stationType: string;
-    selectedDedicatedStation: StationType;
-  };
-  successModalVisibility: boolean;
-  stationsModalVisibility: boolean;
-  expandedStation: number;
-  dedicated_stations: Array<StationType>;
-  payment_data: ReservationResponseType;
+  dedicatedStations: Array<StationType>;
+  selectedDates: string[];
+  isForOthersModalVisible: boolean;
+  isSuccessModalVisible: boolean;
+  isRegistrationModalVisible: boolean;
+  paymentData: object;
+  carModel: string;
+  manufacturingYear: string;
+  parkingType: string;
+  selectedDedicatedStation: number;
+  isDedicatedStationsVisible: boolean;
 }
 
-const NORMAL_STATION = 'عادی';
-
 export default class RegisterCar extends React.Component<Props, State> {
-  backHandler: any;
   state = {
     cars: [{id: 0, name: '', years: [2000]}],
-    form: {
-      first_name: '',
-      last_name: '',
-      phone_number: '',
-      carModel: 'سایپا',
-      manufacturing_year: '2019',
-      stationType: 'عادی',
-      selectedDedicatedStation: {
-        id: 0,
-        name: '',
-        characteristics: ['one', 'two'],
-        price: 0,
-        image: '',
-      },
-    },
-    successModalVisibility: false,
-    stationsModalVisibility: false,
-    expandedStation: -1,
-    dedicated_stations: [],
-    payment_data: PAYMENT_DATA,
-  };
-  async componentDidMount() {
-    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      const {stationsModalVisibility, expandedStation} = this.state;
-      if (stationsModalVisibility) {
-        if (expandedStation !== -1) {
-          this.setState({expandedStation: -1});
-        } else {
-          this._toggleStationsModal();
-        }
-        return true;
-      }
-      return false;
-    });
-    const cars = await apis.getCarModels();
-    const dedicated_stations = await apis.getEventDedicatedStations(
-      this.props.route.params.event_id,
-    );
-    this.setState({
-      cars,
-      dedicated_stations,
-      form: {
-        ...this.state.form,
-        selectedDedicatedStation: dedicated_stations[0],
-      },
-    });
-  }
-
-  componentWillUnmount() {
-    this.backHandler.remove();
-  }
-  _setExpandedStation = (expandedStation: number) =>
-    this.setState({expandedStation});
-  _updateForm = (k: string, v: string) => {
-    this.setState({form: {...this.state.form, [k]: v}});
-  };
-  _toggleSuccessModal = () =>
-    this.setState({successModalVisibility: !this.state.successModalVisibility});
-  _toggleStationsModal = () =>
-    this.setState({
-      stationsModalVisibility: !this.state.stationsModalVisibility,
-    });
-  _onReserveStation = () => {
-    const {form, dedicated_stations, expandedStation} = this.state;
-    this.setState({
-      form: {
-        ...form,
-        selectedDedicatedStation: dedicated_stations[expandedStation],
-      },
-      expandedStation: -1,
-      stationsModalVisibility: false,
-    });
+    dedicatedStations: [EMPTY_STATION],
+    selectedDates: [],
+    isForOthersModalVisible: false,
+    isSuccessModalVisible: false,
+    isRegistrationModalVisible: false,
+    paymentData: {},
+    carModel: '',
+    manufacturingYear: '',
+    parkingType: NORMAL_STATION,
+    selectedDedicatedStation: 0,
+    isDedicatedStationsVisible: false,
   };
 
-  _onSubmitForm = async () => {
+  componentDidMount() {
+    this.fetchFormData();
+  }
+
+  fetchFormData = async () => {
     try {
-      const {event_id, dates} = this.props.route.params;
-      const {
-        form: {
-          first_name,
-          last_name,
-          phone_number,
-          stationType,
-          manufacturing_year,
-          selectedDedicatedStation,
+      const cars = await apis.getCarModels();
+      const dedicatedStations = await apis.getEventDedicatedStations(
+        // this.props.route.params.event_id,
+        1,
+      );
+      this.setState({
+        cars,
+        dedicatedStations,
+      });
+      console.log('dedicatedStations', dedicatedStations);
+      console.log('cars', cars);
+    } catch (e) {
+      console.log('e', e);
+    }
+  };
+
+  onDatePress: OnDatePress = (date, isSelected) => {
+    const {selectedDates} = this.state;
+    this.setState({
+      selectedDates: isSelected
+        ? [...selectedDates, date]
+        : selectedDates.filter((d) => d !== date),
+    });
+  };
+
+  onChangeDedicatedStation = (i: number) =>
+    this.setState({
+      selectedDedicatedStation: i,
+      isDedicatedStationsVisible: false,
+    });
+
+  onSubmit = async () => {
+    const {
+      route: {
+        params: {
+          event: {event_id = 1},
         },
-      } = this.state;
-      const data = {
+      },
+    } = this.props;
+    const {selectedDates} = this.state;
+    try {
+      const data = await apis.reserveVisitorParking({
         event_id,
-        dates,
-        first_name,
-        last_name,
-        phone_number,
-        vehicle_model_id: 1,
-        manufacturing_year: Number(manufacturing_year),
-      };
-      let res;
-      if (stationType === NORMAL_STATION) {
-        res = await apis.normalSellStationReserve(data);
-      } else {
-        res = await apis.dedicatedSellStationReserve({
-          ...data,
-          dedicated_station_id: selectedDedicatedStation.id,
-        });
-      }
-      this.setState({payment_data: res, successModalVisibility: true});
+        dates: selectedDates,
+        phone_number: 'sdf',
+        first_name: 'sd',
+        last_name: 'asdf',
+      });
+      this.setState({
+        paymentData: data,
+        isSuccessModalVisible: true,
+      });
     } catch (e) {
       console.log('e', e);
     }
   };
 
   render() {
+    const [start_date, end_date] = ['1399-05-30', '1399-07-10'];
+    const {navigation} = this.props;
+    // const {
+    //   navigation,
+    //   route: {
+    //     params: {
+    //       event: {event_id, start_date, end_date, visitor_parking_price},
+    //     },
+    //   },
+    // } = this.props;
     const {
-      navigation,
-      route: {
-        params: {price, dates},
-      },
-    } = this.props;
-    const {
+      // ...other,
+      isSuccessModalVisible,
+      paymentData,
+      selectedDates,
+      manufacturingYear,
+      carModel,
+      parkingType,
+      selectedDedicatedStation,
       cars,
-      successModalVisibility,
-      stationsModalVisibility,
-      form: {
-        first_name,
-        last_name,
-        phone_number,
-        carModel,
-        manufacturing_year,
-        stationType,
-        selectedDedicatedStation,
-      },
-      expandedStation,
-      dedicated_stations,
-      payment_data,
+      isDedicatedStationsVisible,
+      isRegistrationModalVisible,
+      isForOthersModalVisible,
+      dedicatedStations,
     } = this.state;
+    console.log('dedicatedStations', dedicatedStations);
     return (
-      <Header title="ثبت نام" onBackPress={navigation.goBack}>
-        <View style={styles.centerContainer}>
-          <View style={styles.horizontalInputsContainer}>
-            <Input
-              title="نام خانوادگی"
-              onChange={(v) => this._updateForm('first_name', v)}
-              containerStyle={styles.smallInput}
-              value={first_name}
-            />
-            <Input
-              title="نام"
-              onChange={(v) => this._updateForm('last_name', v)}
-              containerStyle={styles.smallInput}
-              value={last_name}
-            />
-          </View>
-          <Input
-            title="شماره تماس"
-            onChange={(v) => this._updateForm('phone_number', v)}
-            value={phone_number}
-            keyboardType="phone-pad"
-            containerStyle={styles.input}
+      <View style={styles.mainContainer}>
+        <Header title="خرید بلیط پارکینگ" onBackPress={navigation.goBack} />
+        <ScrollView
+          contentContainerStyle={styles.centerContainer}
+          nestedScrollEnabled>
+          <IranYekan style={styles.title}>انتخاب روزهای موردنظر:</IranYekan>
+          <Calendar
+            dates={{start_date, end_date}}
+            disabledDays={[]}
+            onDatePress={this.onDatePress}
           />
           <View style={styles.horizontalInputsContainer}>
             <Input
               title="سال ساخت"
-              onChange={(v) => this._updateForm('manufacturing_year', v)}
+              onChange={(manufacturingYear) =>
+                this.setState({manufacturingYear})
+              }
               containerStyle={styles.smallInput}
-              value={manufacturing_year}
+              value={manufacturingYear}
               options={cars[0].years.map((year) => String(year))}
             />
             <Input
               title="نوع خودروی شما"
-              onChange={(v) => this._updateForm('carModel', v)}
+              onChange={(carModel) => this.setState({carModel})}
               containerStyle={styles.smallInput}
               value={carModel}
               options={cars.map(({name}) => name)}
@@ -229,45 +181,60 @@ export default class RegisterCar extends React.Component<Props, State> {
           </View>
           <Input
             title="نوع پارکینگ جهت نمایش"
-            onChange={(v) => this._updateForm('stationType', v)}
-            value={stationType}
+            onChange={(parkingType) => this.setState({parkingType})}
+            value={parkingType}
             keyboardType="phone-pad"
             containerStyle={styles.input}
             options={[NORMAL_STATION, 'ویژه']}
           />
-          {stationType !== NORMAL_STATION && (
+          {parkingType !== NORMAL_STATION && (
             <ChooseSpecialStation
-              onPress={this._toggleStationsModal}
-              station={selectedDedicatedStation}
+              onPress={() => this.setState({isDedicatedStationsVisible: true})}
+              station={dedicatedStations[selectedDedicatedStation]}
             />
           )}
-          <IranYekan style={styles.priceText}>
-            مبلغ قابل پرداخت :‌{' '}
-            {stationType === NORMAL_STATION
-              ? price * dates.length
-              : selectedDedicatedStation.price * dates.length}{' '}
-            تومان
-          </IranYekan>
-          <MainButton
-            title="پرداخت وجه جهت رزرو پارکینگ"
-            onPress={this._onSubmitForm}
-            style={styles.submitButton}
+          <CalendarCalcualtion
+            additionalStyles={styles.calendarCalculator}
+            numberOfSelectedDates={selectedDates.length}
+            price={3000}
           />
-        </View>
-        <SuccessModal
-          visible={successModalVisibility}
-          data={{...payment_data, first_name, last_name}}
-          onRequestClose={this._toggleSuccessModal}
+          <IranYekan style={styles.title}>پرداخت وجه و رزرو پارکینگ:</IranYekan>
+          <ReserveCoupledButtons
+            onSubmit={this.onSubmit}
+            onForOthersSubmit={() => {}}
+          />
+        </ScrollView>
+
+        {/* <SuccessModal
+          visible={isSuccessModalVisible}
+          // data={{
+          //   ...paymentData,
+          //   firstName,
+          //   lastName,
+          // }}
+          onRequestClose={() => this.setState({isSuccessModalVisible: false})}
+        /> */}
+        <RegistrationModal
+          onSuccess={() => {}}
+          onRequestClose={() =>
+            this.setState({isRegistrationModalVisible: false})
+          }
+          visible={isRegistrationModalVisible}
         />
-        <StationsModal
-          visible={stationsModalVisibility}
-          stations={dedicated_stations}
-          onReserveStation={this._onReserveStation}
-          onRequestClose={this._toggleStationsModal}
-          onStationPress={this._setExpandedStation}
-          expandedStation={expandedStation}
+        <ForOthersModal
+          onSubmit={() => {}}
+          onRequestClose={() => this.setState({isForOthersModalVisible: false})}
+          visible={isForOthersModalVisible}
         />
-      </Header>
+        <DedicatedStationsModal
+          visible={isDedicatedStationsVisible}
+          onRequestClose={() =>
+            this.setState({isDedicatedStationsVisible: false})
+          }
+          dedicatedStations={dedicatedStations}
+          onSelect={this.onChangeDedicatedStation}
+        />
+      </View>
     );
   }
 }

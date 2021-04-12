@@ -1,14 +1,12 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-
-import ReserveButtons from './components/reserveButtons';
+import {NavigationType, RouteType} from 'constants/types';
 import IranYekan from 'components/common/IranYekan';
 import Header from 'components/common/Header';
+import ReserveButtons from './components/reserveButtons';
 import Video from './components/video';
 import VideoModal from './components/videoModal';
-import {NavigationType, RouteType} from 'constants/types';
-import {FAKE_IMAGE} from 'constants/fakes';
 import styles from './styles';
 
 interface Props {
@@ -18,17 +16,15 @@ interface Props {
 
 export default ({
   navigation,
-}: // route: {
-//   params: {
-//     event,
-//     event: {image, description},
-//   },
-// },
-Props) => {
+  route: {
+    params: {
+      event,
+      event: {image, description},
+    },
+  },
+}: Props) => {
   const [selectedVideo, setSelectedVideo] = useState('');
   // console.log('event', event);
-  const image = FAKE_IMAGE;
-  const description = 'something we';
 
   return (
     <View style={styles.mainContainer}>
@@ -45,10 +41,10 @@ Props) => {
           <IranYekan style={styles.description}>{description}</IranYekan>
         </View>
       </ScrollView>
-      <ReserveButtons navigation={navigation} event={{}} />
+      <ReserveButtons navigation={navigation} event={event} />
       <VideoModal
         video={selectedVideo}
-        onRequestClose={() => setSelectedVideo(null)}
+        onRequestClose={() => setSelectedVideo('')}
       />
     </View>
   );

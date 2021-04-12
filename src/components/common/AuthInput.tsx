@@ -5,7 +5,15 @@ import colors from 'constants/colors';
 import IranYekan from './IranYekan';
 
 type Props = {
-  title: 'شماره تماس' | 'رمز عبور' | 'تکرار رمز عبور' | 'نام' | 'نام خانوادگی';
+  title:
+    | 'شماره تماس'
+    | 'رمز عبور'
+    | 'تکرار رمز عبور'
+    | 'نام'
+    | 'رمز عبور جدید'
+    | 'تکرار رمز عبور جدید'
+    | 'نام خانوادگی'
+    | 'رمز عبور فعلی';
   value?: string;
   style?: object;
   error?: string;

@@ -14,9 +14,7 @@ export default ({video, onPress}: Props) => (
     activeOpacity={0.8}
     onPress={onPress}
     style={styles.mainContainer}>
-    <Image source={{uri: video}} style={styles.video} />
-    <View style={styles.playContainer}>
-      <AntDesign name="play" size={28} color={colors.white1} />
-    </View>
+    <Image source={{uri: video}} style={styles.image} />
+    <AntDesign name="play" size={28} color={colors.white1} />
   </TouchableOpacity>
 );

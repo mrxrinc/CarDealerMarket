@@ -2,12 +2,9 @@ import {StyleSheet} from 'react-native';
 import Colors from 'constants/colors';
 
 export default StyleSheet.create({
-  mainContainer: {
+  contentContainer: {
     flex: 1,
-  },
-  centerContainer: {
-    width: '90%',
-    alignSelf: 'center',
+    paddingHorizontal: 20,
   },
   chooseMarketplaceHeader: {
     flexDirection: 'row',

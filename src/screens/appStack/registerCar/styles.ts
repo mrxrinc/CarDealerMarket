@@ -1,17 +1,29 @@
 import {StyleSheet} from 'react-native';
-import Colors from 'constants/colors';
+import colors from 'constants/colors';
 
 export default StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: colors.white1,
+  },
   centerContainer: {
     width: '90%',
     alignSelf: 'center',
-    paddingTop: 10,
+    paddingVertical: 20,
+  },
+  title: {
+    marginBottom: 10,
+    marginRight: 15,
+  },
+  calendarCalculator: {
+    marginTop: 70,
+    marginBottom: 30,
   },
   horizontalInputsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 30,
   },
   smallInput: {
     flex: 0.485,
@@ -22,9 +34,5 @@ export default StyleSheet.create({
   },
   input: {
     marginTop: 12,
-  },
-  submitButton: {
-    backgroundColor: Colors.purple1,
-    marginTop: 30,
   },
 });

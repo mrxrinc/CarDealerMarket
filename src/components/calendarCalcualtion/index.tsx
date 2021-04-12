@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import IranYekan from 'components/common/IranYekan';
-import TextWithSubtitle from './components/TextWithSubtitle';
+import TextWithSubtitle from 'components/TextWithSubtitle';
 import {numberWithCommas} from 'utils/helpers';
 import styles from './styles';
 

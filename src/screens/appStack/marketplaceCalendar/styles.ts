@@ -4,11 +4,10 @@ import {BOTTOM_TAB_PADDING} from 'constants/layout';
 
 export default StyleSheet.create({
   mainContainer: {
-    paddingBottom: BOTTOM_TAB_PADDING,
+    flex: 1,
   },
-  centerContainer: {
-    width: '90%',
-    alignSelf: 'center',
+  contentContainer: {
+    paddingHorizontal: 20,
   },
   warningText: {
     color: Colors.yellow1,
